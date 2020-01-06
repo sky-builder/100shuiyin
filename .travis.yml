@@ -3,6 +3,7 @@ node_js: '8.10'
 
 before_install:
   - eval `ssh-agent -s`
+  - chmod 600 ./ci3
   - ssh-add ./ci3
 
 deploy:
