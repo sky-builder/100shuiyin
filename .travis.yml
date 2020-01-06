@@ -12,4 +12,4 @@ if: branch = ci_setup
     skip_cleanup: true
     script: bash deploy.sh
     on:
-      branch: ci_setup
+      branch:  ci_setup
