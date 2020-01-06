@@ -95,26 +95,40 @@ const AppBody = props => {
 };
 const AppMain = props => {
   const [activeLogo, setActiveLogo] = useState(null);
-  const logoList = props.logoList;
-  const img = props.bgImage.img;
-  const scale = props.bgImage.scale;
+  const {bgImage, setBgImage, pageStage, logoList} = props;
+  const {img, name, scale} = bgImage
 
   useEffect(() => {
-    if (props.bgImage) {
+    function handleWindowResize() {
       let nw = img.naturalWidth;
       let nh = img.naturalHeight;
       let canvas = document.querySelector('.app__bg');
       let appBody = document.querySelector('.app__body');
-      if (scale < 1) {
-        canvas.style.transform = 'scale(' + scale + ')';
-        appBody.style.height = appBody.offsetHeight + 'px';
-      }
+      let bw = appBody.offsetWidth;
+      let bh = appBody.offsetHeight;
+      let s1 = bw / nw;
+      let s2 = bh / nh;
+      let newScale = Math.min(s1, s2);
+      if (newScale > 1) newScale = 1;
+      setBgImage({
+        img: img,
+        name: name,
+        scale: newScale
+      })
+      canvas.style.transform = 'scale(' + newScale + ')';
+      appBody.style.height = appBody.offsetHeight + 'px';
       canvas.width = nw;
       canvas.height = nh;
       let ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
+      for (let i = 0; i < logoList.length; i += 1) {
+        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y);
+      }
     }
-  }, [img, props.bgImage, scale]);
+    handleWindowResize();
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [img, logoList, name, pageStage, setBgImage]);
 
   function handleMouseDown(e) {
     let canvas = document.querySelector('.app__bg');
