@@ -16,8 +16,11 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          hello,travis-ci
+          Learn React
         </a>
+        <div>
+          hello,travis
+        </div>
       </header>
     </div>
   );
