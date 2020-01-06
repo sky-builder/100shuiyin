@@ -27,10 +27,41 @@
 .app__body {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
 }
 
 .app__action > .button + .button {
   margin-left: 0.6rem;
+}
+.app__main {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  height: 100%;
+  flex: 1;
+}
+.app__bg-container {
+  overflow: auto;
+  width: 100%;
+}
+.app__property-panel {
+  flex: 320px 0 0;
+  box-shadow: -3px 0px 9px rgba(0, 0, 0, 0.25);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.app__remove-logo {
+  margin-top: auto;
+}
+.input-group__body {
+  display: flex;
+  flex-direction: row;;
+}
+.input-group__range {
+  flex: 1;
+}
+.input-group__input {
+  flex: 60px 0 0;
+  margin-left: 16px;
 }
