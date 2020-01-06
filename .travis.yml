@@ -3,6 +3,7 @@ node_js: '8.10'
 
 before_install:
   - eval `ssh-agent -s`
+  - openssl aes-256-cbc -K $encrypted_0900f9246d42_key -iv $encrypted_0900f9246d42_iv -in ci3.enc -out ci3 -d
   - chmod 600 ./ci3
   - ssh-add ./ci3
 
