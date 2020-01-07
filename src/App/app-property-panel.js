@@ -24,6 +24,7 @@ function PropertyPanel(props) {
     setIsDisabled(!activeLogo);
     setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
   }, [activeLogo]);
+
   return (
     <div className="app__property-panel">
       <div className="input-group">

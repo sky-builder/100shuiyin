@@ -1,16 +1,23 @@
 import React from 'react';
-import { PAGE_STAGE } from '../js/enum';
+import { PAGE_STAGE, ACTION } from '../js/enum';
+import { exportCanvas } from '../js/utility'
 
 const AppAction = props => {
   function exportImage() {
     let canvas = document.querySelector('.app__bg');
-    let a = document.createElement('a');
-    a.setAttribute('download', props.bgImage.name.split('.')[0]);
-    a.href = canvas.toDataURL('image/png');
-    a.click();
+    exportCanvas(canvas, props.bgImage.name.split('.')[0]);
   }
-  function uploadLogo(e) {
+  function toWelcomeStage() {
+    props.setPageStage(PAGE_STAGE.WELCOME);
+    props.setLogoList([]);
+    props.setActiveLogo(null);
+    props.setActiveAction(ACTION.NONE);
+  }
+  function handleLogoChange(e) {
     if (!e.target.files || !e.target.files[0]) return;
+    loadLogo(e.target.files[0])
+  }
+  function loadLogo(file) {
     let reader = new FileReader();
     reader.addEventListener('load', e => {
       let url = e.target.result;
@@ -36,16 +43,12 @@ const AppAction = props => {
         ctx.drawImage(img, 0, 0);
       });
     });
-    reader.readAsDataURL(e.target.files[0]);
-  }
-  function changeStage() {
-    props.setPageStage(1);
-    props.setLogoList([]);
+    reader.readAsDataURL(file);
   }
   if (props.pageStage === PAGE_STAGE.EDIT) {
     return (
       <div className="app__action">
-        <button className="app__delete button is-danger" onClick={changeStage}>
+        <button className="app__delete button is-danger" onClick={toWelcomeStage}>
           delete
         </button>
         <button className="app__upload button is-info ">
@@ -54,7 +57,7 @@ const AppAction = props => {
             <input
               className="app__logo-input"
               type="file"
-              onChange={uploadLogo}
+              onChange={handleLogoChange}
             />
           </label>
         </button>

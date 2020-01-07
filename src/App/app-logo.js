@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AppLogo(props) {
+function AppLogo() {
   return <img className="app__logo" src="/logo192.png" alt="logo" />;
 }
 

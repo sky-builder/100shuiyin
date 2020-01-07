@@ -56,3 +56,37 @@ export function isInsideRect(p, cx, cy, rect, angle) {
   let precision = 1e-6;
   return diff < precision;
 }
+
+export function exportCanvas(canvas, name, option = {
+  format: 'image/png',
+  quality: 1
+}) {
+  if (!canvas) return;
+  if (!name) name = new Date().getTime();
+  if (!option) option = {
+    format: 'image/png'
+  }
+  let a = document.createElement('a');
+  a.setAttribute('download', name);
+  switch(option.format) {
+    default: {
+      a.href = canvas.toDataURL('image/png');
+      break;
+    }
+  }
+  a.click();
+}
+
+export function renderImage(file, callback) {
+  let reader = new FileReader();
+  let name = file.name;
+  reader.addEventListener('load', e => {
+    let url = e.target.result;
+    let img = new Image();
+    img.src = url;
+    img.addEventListener('load', () => {
+      callback(img, name)
+    });
+  });
+  reader.readAsDataURL(file);
+}
