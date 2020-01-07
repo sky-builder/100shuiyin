@@ -266,10 +266,30 @@ const AppMain = props => {
 };
 
 const AppWelcome = props => {
+  function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files && files[0]) {
+      loadBg(files[0]);
+    }
+  }
+  function handleDragEnter(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  function handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
   function handleBgChange(e) {
     if (!e.target.files || !e.target.files[0]) return;
+    loadBg(e.target.files[0]);
+  }
+  function loadBg(file) {
     let reader = new FileReader();
-    let name = e.target.files[0].name;
+    let name = file.name;
     reader.addEventListener('load', e => {
       let url = e.target.result;
       let img = new Image();
@@ -290,10 +310,10 @@ const AppWelcome = props => {
         props.setPageStage(EDIT_STAGE);
       });
     });
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(file);
   }
   return (
-    <div className="app__welcome">
+    <div className="app__welcome" onDragEnter={handleDragEnter} onDragOver={handleDragOver} onDrop={handleDrop}>
       <label htmlFor="upload-bg-image">选择背景图片</label>
       <br />
       <input id="upload-bg-image" type="file" onChange={handleBgChange} />
