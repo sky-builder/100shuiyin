@@ -1,14 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './css/base/index.css';
+import './css/projects/index.css';
+import './css/coesmetic/index.css';
 
 // welcome -> edit
 const WELCOME_STAGE = 1;
 const EDIT_STAGE = 2;
+const ACTION_NONE = 0;
+const ACTION_MOVE = 1;
 
 const AppLogo = React.memo(props => {
   return <img className="app__logo" src="/logo192.png" alt="logo" />;
 });
 
+const PropertyPanel = props => {
+  const [isDisabled, setIsDisabled] = useState(false);
+  const { activeLogo, bgImage, logoList } = props;
+  const [opacity, setOpacity] = useState(100);
+  function handleOpactiyChange(e) {
+    let value = e.target.value;
+    activeLogo.opacity = value / 100;
+    setOpacity(value);
+    let canvas = document.querySelector('.app__bg');
+    let ctx = canvas.getContext('2d');
+    ctx.drawImage(bgImage.img, 0, 0);
+    for (let i = 0; i < logoList.length; i += 1) {
+      ctx.save();
+      ctx.globalAlpha = logoList[i].opacity || 1;
+      ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y);
+      ctx.restore();
+    }
+  }
+  useEffect(() => {
+    setIsDisabled(!activeLogo);
+    setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
+  }, [activeLogo]);
+  return (
+    <div className="app__property-panel">
+      <div className="input-group">
+        <label htmlFor="opacity-input">透明度</label>
+        <div className="input-group__body">
+          <input
+            onChange={handleOpactiyChange}
+            value={opacity}
+            className="input-group__range"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            disabled={isDisabled}
+          />
+          <input
+            onChange={handleOpactiyChange}
+            value={opacity}
+            id="opacity-input"
+            className="input-group__input input is-small"
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            disabled={isDisabled}
+          />
+        </div>
+      </div>
+      <button
+        className="app__remove-logo button is-danger"
+        disabled={isDisabled}
+      >
+        remove logo
+      </button>
+    </div>
+  );
+};
 const AppAction = props => {
   function exportImage() {
     let canvas = document.querySelector('.app__bg');
@@ -34,7 +97,8 @@ const AppAction = props => {
               y: 0,
               w: nw,
               h: nh,
-              img: img
+              img: img,
+              opacity: 1
             }
           ])
         );
@@ -52,10 +116,7 @@ const AppAction = props => {
   if (props.pageStage === EDIT_STAGE) {
     return (
       <div className="app__action">
-        <button
-          className="app__delete button is-danger"
-          onClick={changeStage}
-        >
+        <button className="app__delete button is-danger" onClick={changeStage}>
           delete
         </button>
         <button className="app__upload button is-info ">
@@ -89,21 +150,30 @@ const AppBody = props => {
     return (
       <div className="app__body">
         <AppMain {...props} />
+        <PropertyPanel {...props}></PropertyPanel>
       </div>
     );
   }
 };
 const AppMain = props => {
-  const [activeLogo, setActiveLogo] = useState(null);
-  const {bgImage, setBgImage, pageStage, logoList} = props;
-  const {img, name, scale} = bgImage
+  const {
+    bgImage,
+    setBgImage,
+    pageStage,
+    logoList,
+    activeLogo,
+    setActiveLogo,
+    activeAction,
+    setActiveAction
+  } = props;
+  const { img, name, scale } = bgImage;
 
   useEffect(() => {
     function handleWindowResize() {
       let nw = img.naturalWidth;
       let nh = img.naturalHeight;
       let canvas = document.querySelector('.app__bg');
-      let appBody = document.querySelector('.app__body');
+      let appBody = document.querySelector('.app__main');
       let bw = appBody.offsetWidth;
       let bh = appBody.offsetHeight;
       let s1 = bw / nw;
@@ -114,15 +184,20 @@ const AppMain = props => {
         img: img,
         name: name,
         scale: newScale
-      })
-      canvas.style.transform = 'scale(' + newScale + ')';
-      appBody.style.height = appBody.offsetHeight + 'px';
+      });
       canvas.width = nw;
       canvas.height = nh;
+      if (newScale < 1) {
+        canvas.style.width = nw * newScale + 'px';
+        canvas.style.height = nh * newScale + 'px';
+      }
       let ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       for (let i = 0; i < logoList.length; i += 1) {
+        ctx.save();
+        ctx.globalAlpha = logoList[i].opacity;
         ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y);
+        ctx.restore();
       }
     }
     handleWindowResize();
@@ -147,6 +222,7 @@ const AppMain = props => {
         y <= logo.h + logo.y
       ) {
         setActiveLogo(logo);
+        setActiveAction(ACTION_MOVE);
         return;
       }
     }
@@ -154,6 +230,7 @@ const AppMain = props => {
 
   function handleMouseMove(e) {
     if (!activeLogo) return;
+    if (!activeAction) return;
     let canvas = document.querySelector('.app__bg');
     let x = activeLogo.x + e.movementX / scale;
     let y = activeLogo.y + e.movementY / scale;
@@ -163,23 +240,28 @@ const AppMain = props => {
     activeLogo.y = y;
     ctx.drawImage(img, 0, 0);
     for (let i = 0; i < logoList.length; i += 1) {
+      ctx.save();
+      ctx.globalAlpha = logoList[i].opacity || 1;
       ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y);
+      ctx.restore();
     }
   }
 
   function handleMouseUp(e) {
-    setActiveLogo(null);
+    setActiveAction(ACTION_NONE);
   }
 
   return (
-    <canvas
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      className="app__bg"
-      width="0"
-      height="0"
-    ></canvas>
+    <div className="app__main">
+      <canvas
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        className="app__bg"
+        width="0"
+        height="0"
+      ></canvas>
+    </div>
   );
 };
 
@@ -221,6 +303,8 @@ const AppWelcome = props => {
 
 function App() {
   const [pageStage, setPageStage] = useState(WELCOME_STAGE);
+  const [activeLogo, setActiveLogo] = useState(null);
+  const [activeAction, setActiveAction] = useState(ACTION_NONE);
   const [logoList, setLogoList] = useState([]);
   const [bgImage, setBgImage] = useState();
 
@@ -230,7 +314,11 @@ function App() {
     bgImage,
     setBgImage,
     logoList,
-    setLogoList
+    setLogoList,
+    activeLogo,
+    setActiveLogo,
+    activeAction,
+    setActiveAction
   };
   return (
     <div className="app">

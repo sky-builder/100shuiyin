@@ -16,7 +16,6 @@
   height: 80px;
 }
 
-
 .app__logo-input {
   display: none;
 }
@@ -27,10 +26,34 @@
 .app__body {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
 }
 
 .app__action > .button + .button {
   margin-left: 0.6rem;
+}
+.app__welcome {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app__main {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  height: 100%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+.app__property-panel {
+  border-left: 1px solid #eee;
+  flex: 320px 0 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.app__remove-logo {
+  margin-top: auto;
 }

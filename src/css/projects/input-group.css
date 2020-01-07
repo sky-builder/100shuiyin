@@ -1,0 +1,12 @@
+
+.input-group__body {
+  display: flex;
+  flex-direction: row;;
+}
+.input-group__range {
+  flex: 1;
+}
+.input-group__input {
+  flex: 60px 0 0;
+  margin-left: 16px;
+}
