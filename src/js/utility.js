@@ -28,6 +28,7 @@ export function isInsideRect(p, cx, cy, rect, angle) {
   let p2 = getPoint(cx, cy, x + w, y, angle);
   let p3 = getPoint(cx, cy, x + w, y + h, angle);
   let p4 = getPoint(cx, cy, x, y + h, angle);
+  console.log(p1,p2, p3, p4, cx, cy, angle);
   let a1 = getTriangleArea(
     getDistance(p, p1),
     getDistance(p, p2),
@@ -52,7 +53,6 @@ export function isInsideRect(p, cx, cy, rect, angle) {
   let rectArea = w * h;
   let calcArea = a1 + a2 + a3 + a4;
   let diff = Math.abs(calcArea - rectArea);
-  console.log('diff', diff);
   let precision = 1e-6;
   return diff < precision;
 }

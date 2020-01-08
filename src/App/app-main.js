@@ -94,6 +94,11 @@ const AppMain = props => {
         y: bottomY,
         type: ACTION.BOTTOM_RIGHT_RESIZE
       },
+      {
+        x: centerX,
+        y: topY - 50,
+        type: ACTION.ROTATE
+      }
     ]
     anchorList.forEach(anchor => {
       anchor.w = ANCHOR_WIDTH;
@@ -105,7 +110,8 @@ const AppMain = props => {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
-      if (isInsideRect([mx, my], bgImage.img.naturalWidth / 2, bgImage.img.naturalHeight / 2, rectList[i], 0)) {
+      if (isInsideRect([mx, my], bgImage.img.naturalWidth / 2, bgImage.img.naturalHeight / 2, rectList[i], activeLogo.angle)) {
+        console.log('hit', rectList[i].type);
         return rectList[i].type
       }
     }
@@ -252,11 +258,38 @@ const AppMain = props => {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
+      let cx = logoList[i].x + logoList[i].w / 2;
+      let cy = logoList[i].x + logoList[i].h / 2;
+      ctx.rotate(logoList[i].angle * Math.PI / 180)
+      console.log(logoList[i].angle);
       ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
       }
       ctx.restore();
+    }
+  }
+  function draw2() {
+    let canvas = document.querySelector('.app__bg');
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    for (let i = 0; i < logoList.length; i += 1) {
+      ctx.save();
+      ctx.globalAlpha = logoList[i].opacity || 1;
+      // let cx = logoList[i].x + logoList[i].w / 2;
+      let cx = canvas.width /2;
+      let cy = canvas.height /2;
+      // let cy = logoList[i].y + logoList[i].h / 2;
+      ctx.translate(cx, cy);
+      ctx.rotate(logoList[i].angle * Math.PI / 180)
+      ctx.translate(-cx, -cy);
+      console.log(logoList[i].angle);
+      ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      if (activeLogo === logoList[i]) {
+        drawOutline(ctx);
+      }
+    ctx.restore();
     }
   }
   function handleMouseMove(e) {
@@ -282,11 +315,38 @@ const AppMain = props => {
       }
       case ACTION.MOVE: {
         move(e);
+        break;
+      }
+      case ACTION.ROTATE: {
+        rotate(e);
+        break;
       }
       default: {
         break;
       }
     }
+  }
+  function rotate(e) {
+    let [mx, my] = getPos(e);
+    // let {x, y, w, h} = activeLogo;
+    // let cx = x + w * 0.5;
+    let canvas= document.querySelector('.app__bg');
+    let w = canvas.width;
+    let h = canvas.height;
+    // let cy = y + h * 0.5;
+    function getRad(p1,p2) {
+      let x = p1[0] - p2[0];
+      let y = p1[1] - p2[1];
+      return Math.atan2(y, x);
+    }
+    function rad2deg(rad) {
+      return rad * 180 / Math.PI;
+    }
+    let rad = getRad([mx, my], [w/2, h/2]);
+    let angle = rad2deg(rad);
+    let fixedAngle = angle + 90;
+    activeLogo.angle = fixedAngle;
+    draw2();
   }
   function drawOutline(ctx) {
     if (!activeLogo) return;

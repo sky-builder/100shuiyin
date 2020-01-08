@@ -34,7 +34,8 @@ const AppAction = props => {
               w: nw,
               h: nh,
               img: img,
-              opacity: 1
+              opacity: 1,
+              angle: 0
             }
           ])
         );
