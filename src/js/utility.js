@@ -90,3 +90,11 @@ export function renderImage(file, callback) {
   });
   reader.readAsDataURL(file);
 }
+
+export function loadImg(src, name, callback) {
+  let img = new Image();
+  img.addEventListener('load', (e) => {
+    callback(img, name);
+  })
+  img.src = src;
+}

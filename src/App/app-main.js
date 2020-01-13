@@ -39,12 +39,34 @@ const AppMain = props => {
         canvas.style.width = nw * newScale + 'px';
         canvas.style.height = nh * newScale + 'px';
       }
-      draw();
+      let ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      for (let i = 0; i < logoList.length; i += 1) {
+        ctx.save();
+        ctx.globalAlpha = logoList[i].opacity || 1;
+        ctx.rotate(logoList[i].angle * Math.PI / 180)
+        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+        if (activeLogo === logoList[i]) {
+          if (!activeLogo) return;
+          const anchorList = getAnchorList(activeLogo)
+          ctx.strokeStyle = '#399';
+          ctx.strokeWidth = 2;
+          ctx.fillStyle = '#688';
+          let {x, y, w, h} = activeLogo;
+          ctx.strokeRect(x, y, w, h);
+          anchorList.forEach(anchor => {
+            let {x, y, w, h} = anchor;
+            ctx.fillRect(x, y, w, h);
+          })
+        }
+        ctx.restore();
+      }
     }
     handleWindowResize();
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage]);
+  }, [activeLogo, img, logoList, logoList.length, name, setBgImage]);
   function getAnchorList(rect) {
     let {x, y, w, h} = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
@@ -258,10 +280,7 @@ const AppMain = props => {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
-      let cx = logoList[i].x + logoList[i].w / 2;
-      let cy = logoList[i].x + logoList[i].h / 2;
       ctx.rotate(logoList[i].angle * Math.PI / 180)
-      console.log(logoList[i].angle);
       ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
@@ -277,10 +296,10 @@ const AppMain = props => {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
-      // let cx = logoList[i].x + logoList[i].w / 2;
-      let cx = canvas.width /2;
-      let cy = canvas.height /2;
-      // let cy = logoList[i].y + logoList[i].h / 2;
+      let cx = logoList[i].x + logoList[i].w / 2;
+      // let cx = canvas.width /2;
+      // let cy = canvas.height /2;
+      let cy = logoList[i].y + logoList[i].h / 2;
       ctx.translate(cx, cy);
       ctx.rotate(logoList[i].angle * Math.PI / 180)
       ctx.translate(-cx, -cy);
@@ -336,7 +355,7 @@ const AppMain = props => {
     // let cy = y + h * 0.5;
     function getRad(p1,p2) {
       let x = p1[0] - p2[0];
-      let y = p1[1] - p2[1];
+      let y = p2[1] - p1[1];
       return Math.atan2(y, x);
     }
     function rad2deg(rad) {
@@ -344,7 +363,7 @@ const AppMain = props => {
     }
     let rad = getRad([mx, my], [w/2, h/2]);
     let angle = rad2deg(rad);
-    let fixedAngle = angle + 90;
+    let fixedAngle = angle;
     activeLogo.angle = fixedAngle;
     draw2();
   }

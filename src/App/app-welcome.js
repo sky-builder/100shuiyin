@@ -2,7 +2,7 @@
 import { PAGE_STAGE } from '../js/enum';
 import React from 'react';
 
-import { renderImage } from '../js/utility'
+import { renderImage, loadImg } from '../js/utility'
 
 const AppWelcome = props => {
     // necessary for enable drop event 
@@ -27,6 +27,7 @@ const AppWelcome = props => {
         if (!e.target.files || !e.target.files[0]) return;
         renderImage(e.target.files[0], loadBg);
     }
+    loadImg('https://picsum.photos/500', '123', loadBg)
     function loadBg(img, name) {
         let appBody = document.querySelector('.app__body');
         let bw = appBody.offsetWidth;
