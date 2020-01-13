@@ -132,7 +132,7 @@ const AppMain = props => {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
-      if (isInsideRect([mx, my], bgImage.img.naturalWidth / 2, bgImage.img.naturalHeight / 2, rectList[i], activeLogo.angle)) {
+      if (isInsideRect([mx, my], activeLogo.x + activeLogo.w / 2, activeLogo.y + activeLogo.h / 2, rectList[i], activeLogo.angle)) {
         console.log('hit', rectList[i].type);
         return rectList[i].type
       }
@@ -228,15 +228,21 @@ const AppMain = props => {
   }
   function horizontalResize(e) {
     let [x] = getPos(e);
-    let dx = x - activeLogo.anchorX;
-    if (dx < 0) {
-      activeLogo.x = x;
-      activeLogo.w = -dx;
-    } else {
-      activeLogo.w = dx;
-      activeLogo.x = activeLogo.anchorX;
-    }
-    draw();
+    let mx = e.movementX;
+    let dw = -mx * 2;
+    activeLogo.x = x;
+    activeLogo.w = activeLogo.w + dw;
+    // let dx = x - activeLogo.anchorX;
+    // if (dx < 0) {
+    //   let d = Math.abs(x - activeLogo.x);
+    //   activeLogo.x = x;
+    //   activeLogo.w = activeLogo.w + 2 * d;
+    // } else {
+    //   let d = Math.abs(x - activeLogo.anchorX);
+    //   activeLogo.w = activeLogo.w + d * 2;
+    //   activeLogo.x = activeLogo.x - d;
+    // }
+    draw2();
   }
   function freeResize(e) {
     let [x,y] = getPos(e);
@@ -303,7 +309,6 @@ const AppMain = props => {
       ctx.translate(cx, cy);
       ctx.rotate(logoList[i].angle * Math.PI / 180)
       ctx.translate(-cx, -cy);
-      console.log(logoList[i].angle);
       ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
@@ -349,9 +354,10 @@ const AppMain = props => {
     let [mx, my] = getPos(e);
     // let {x, y, w, h} = activeLogo;
     // let cx = x + w * 0.5;
-    let canvas= document.querySelector('.app__bg');
-    let w = canvas.width;
-    let h = canvas.height;
+    // let canvas= document.querySelector('.app__bg');
+    let {x, y, w, h} = activeLogo;
+    // let w = canvas.width;
+    // let h = canvas.height;
     // let cy = y + h * 0.5;
     function getRad(p1,p2) {
       let x = p1[0] - p2[0];
@@ -361,9 +367,9 @@ const AppMain = props => {
     function rad2deg(rad) {
       return rad * 180 / Math.PI;
     }
-    let rad = getRad([mx, my], [w/2, h/2]);
+    let rad = getRad([mx, my], [x + w / 2, y + h / 2]);
     let angle = rad2deg(rad);
-    let fixedAngle = angle;
+    let fixedAngle = -(angle - 90);
     activeLogo.angle = fixedAngle;
     draw2();
   }
