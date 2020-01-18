@@ -131,6 +131,9 @@ const AppMain = props => {
   function getActionType(mx, my) {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
+    let rect = Object.assign({}, activeLogo, {type: 1})
+    rectList.push(rect);
+    rectList.push(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
       if (isInsideRect([mx, my], activeLogo.x + activeLogo.w / 2, activeLogo.y + activeLogo.h / 2, rectList[i], activeLogo.angle)) {
         console.log('hit', rectList[i].type);
@@ -152,6 +155,8 @@ const AppMain = props => {
   function handleMouseDown(e) {
     let [x, y] = getPos(e);
     let action = getActionType(x, y);
+    console.log(action);
+    
     if (action) {
       switch (action) {
         case ACTION.TOP_LEFT_RESIZE: {
@@ -203,10 +208,7 @@ const AppMain = props => {
     for (let i = logoList.length - 1; i >= 0; i -= 1) {
       let logo = logoList[i];
       if (
-        x >= logo.x &&
-        x <= logo.w + logo.x &&
-        y >= logo.y &&
-        y <= logo.h + logo.y
+        isInsideRect([x, y], logo.cx, logo.cy, logo, logo.angle)
       ) {
         setActiveLogo(logo);
         setActiveAction(ACTION.MOVE);
@@ -228,10 +230,10 @@ const AppMain = props => {
   }
   function horizontalResize(e) {
     let [x] = getPos(e);
-    let mx = e.movementX;
-    let dw = -mx * 2;
-    activeLogo.x = x;
-    activeLogo.w = activeLogo.w + dw;
+    let {cx} = activeLogo;
+    let w = Math.abs(x - cx);
+    activeLogo.x = cx - w;
+    activeLogo.w = w * 2;
     // let dx = x - activeLogo.anchorX;
     // if (dx < 0) {
     //   let d = Math.abs(x - activeLogo.x);
@@ -274,9 +276,15 @@ const AppMain = props => {
   function move(e) {
     let x = activeLogo.x + e.movementX / scale;
     let y = activeLogo.y + e.movementY / scale;
+    let cx = x + activeLogo.w / 2;
+    let cy = y + activeLogo.h / 2;
+    // console.log(x,y,cx,cy);
+    
     activeLogo.x = x;
     activeLogo.y = y;
-    draw();
+    activeLogo.cx = cx;
+    activeLogo.cy = cy;
+    draw2();
   }
   function draw() {
     let canvas = document.querySelector('.app__bg');

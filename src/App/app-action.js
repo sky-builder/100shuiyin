@@ -26,6 +26,8 @@ const AppAction = props => {
       img.addEventListener('load', () => {
         let nw = img.naturalWidth;
         let nh = img.naturalHeight;
+        let cx = nw / 2;
+        let cy = nh / 2;
         props.setLogoList(
           props.logoList.concat([
             {
@@ -35,7 +37,9 @@ const AppAction = props => {
               h: nh,
               img: img,
               opacity: 1,
-              angle: 0
+              angle: 0,
+              cx,
+              cy
             }
           ])
         );
