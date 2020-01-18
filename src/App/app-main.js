@@ -246,6 +246,25 @@ const AppMain = props => {
     // }
     draw2();
   }
+  function topLeftResize(e) {
+ 
+    let {w, h, cx, cy} = activeLogo;
+    let [x,y] = getPos(e);
+    let dis = getDistance([x,y], [cx,cy]);
+    console.log(x, y, activeLogo.x, activeLogo.y, cx, cy, dis, w, h);
+    if (w > h) {
+      activeLogo.y = cy - dis;
+      activeLogo.x = cx - (dis * (w / h))
+      activeLogo.h = dis * 2;
+      activeLogo.w = dis * 2 * (w / h);
+    } else {
+      activeLogo.y = cy - (dis / (w/h));
+      activeLogo.x = cx - dis;
+      activeLogo.w = dis * 2;
+      activeLogo.h = dis * 2/ (w / h);
+    }
+    draw2();
+  }
   function freeResize(e) {
     let [x,y] = getPos(e);
     let dx = x - activeLogo.anchorX;
@@ -328,7 +347,10 @@ const AppMain = props => {
     if (!activeLogo) return;
     if (!activeAction) return;
     switch (activeAction) {
-      case ACTION.TOP_LEFT_RESIZE:
+      case ACTION.TOP_LEFT_RESIZE:{
+        topLeftResize(e);
+        break;
+      }
       case ACTION.TOP_RIGHT_RESIZE:
       case ACTION.BOTTOM_LEFT_RESIZE:
       case ACTION.BOTTOM_RIGHT_RESIZE: {
