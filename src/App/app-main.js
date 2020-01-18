@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { isInsideRect } from '../js/utility';
+import { isInsideRect, getDistance } from '../js/utility';
 import { ACTION } from '../js/enum';
 
 const AppMain = props => {
@@ -229,9 +229,9 @@ const AppMain = props => {
     draw();
   }
   function horizontalResize(e) {
-    let [x] = getPos(e);
-    let {cx} = activeLogo;
-    let w = Math.abs(x - cx);
+    let [x, y] = getPos(e);
+    let {cx, cy} = activeLogo;
+    let w = getDistance([x,y], [cx,cy]);
     activeLogo.x = cx - w;
     activeLogo.w = w * 2;
     // let dx = x - activeLogo.anchorX;
