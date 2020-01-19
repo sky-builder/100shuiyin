@@ -217,16 +217,13 @@ const AppMain = props => {
     }
   }
   function verticalResize(e) {
-    let [, y] = getPos(e);
-    let dy = y - activeLogo.anchorY;
-    if (dy < 0) {
-      activeLogo.y = y;
-      activeLogo.h = -dy;
-    } else {
-      activeLogo.h = dy;
-      activeLogo.y = activeLogo.anchorY;
-    }
-    draw();
+    let [x, y] = getPos(e);
+    let {cx, cy} = activeLogo;
+    let h = getDistance([x,y], [cx,cy]);
+    activeLogo.y = cy - h;
+    activeLogo.h = h * 2;
+
+    draw2();
   }
   function horizontalResize(e) {
     let [x, y] = getPos(e);
@@ -247,22 +244,17 @@ const AppMain = props => {
     draw2();
   }
   function topLeftResize(e) {
- 
     let {w, h, cx, cy} = activeLogo;
     let [x,y] = getPos(e);
     let dis = getDistance([x,y], [cx,cy]);
-    console.log(x, y, activeLogo.x, activeLogo.y, cx, cy, dis, w, h);
-    if (w > h) {
-      activeLogo.y = cy - dis;
-      activeLogo.x = cx - (dis * (w / h))
-      activeLogo.h = dis * 2;
-      activeLogo.w = dis * 2 * (w / h);
-    } else {
-      activeLogo.y = cy - (dis / (w/h));
-      activeLogo.x = cx - dis;
-      activeLogo.w = dis * 2;
-      activeLogo.h = dis * 2/ (w / h);
-    }
+    let dis2 = dis * dis;
+    let bottom = (1 + (w * w) / (h * h))
+    let height = Math.sqrt(dis2 / bottom)
+    let width = height *  w / h;
+    activeLogo.x = cx - width;
+    activeLogo.y = cy - height;
+    activeLogo.w = width * 2;
+    activeLogo.h = height * 2;
     draw2();
   }
   function freeResize(e) {
@@ -354,7 +346,7 @@ const AppMain = props => {
       case ACTION.TOP_RIGHT_RESIZE:
       case ACTION.BOTTOM_LEFT_RESIZE:
       case ACTION.BOTTOM_RIGHT_RESIZE: {
-        freeResize(e);
+        topLeftResize(e);
         break;
       }
       case ACTION.CENTER_LEFT_RESIZE:
