@@ -39,6 +39,7 @@
   align-items: center;
 }
 .app__main {
+  position: relative;
   display: flex;
   flex-direction: row;
   overflow: auto;
@@ -56,4 +57,7 @@
 }
 .app__remove-logo {
   margin-top: auto;
+}
+.app__text-logo {
+  position: absolute;
 }
