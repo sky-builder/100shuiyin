@@ -4,7 +4,6 @@ import { exportCanvas } from '../js/utility'
 
 const AppAction = props => {
   function exportImage() {
-    drawText();
     let canvas = document.querySelector('.app__bg');
     exportCanvas(canvas, props.bgImage.name.split('.')[0]);
   }
@@ -40,21 +39,24 @@ const AppAction = props => {
     loadLogo(e.target.files[0])
   }
   function addText() {
-    let canvas = document.querySelector('canvas');
-    let x = canvas.offsetLeft;
-    let y = canvas.offsetTop;
-    console.log(x, y);
-    let div = document.createElement('div')
-    div.setAttribute('contenteditable', true);
-    div.classList.add('app__text-logo')
-    div.innerText = 'hello,world';
-    div.style.position = 'absolute';
-    div.style.display = 'inline-block';
-    div.style.left = x + 'px';
-    div.style.top = y + 'px';
-    div.style.lineHeight = 1;
-    let main = document.querySelector('.app__main');
-    main.appendChild(div);
+    let cv = document.createElement('canvas');
+    let ctx = cv.getContext('2d');
+    ctx.font = '16px serif';
+    let w = ctx.measureText('hello,world').width;
+    let obj = {
+      x: 0,
+      y: 0,
+      w: w,
+      h: 16,
+      drawType: 'text',
+      text: 'hello,world',
+      opcaity: 1,
+      angle: 0,
+      cx: w / 2,
+      cy: 8,
+    }
+    let newLogoList = props.logoList.concat([obj])
+    props.setLogoList(newLogoList)
   }
   function loadLogo(file) {
     let reader = new FileReader();
@@ -77,6 +79,7 @@ const AppAction = props => {
               img: img,
               opacity: 1,
               angle: 0,
+              drawType: 'image',
               cx,
               cy
             }

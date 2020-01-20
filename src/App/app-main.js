@@ -46,17 +46,24 @@ const AppMain = props => {
         ctx.save();
         ctx.globalAlpha = logoList[i].opacity || 1;
         ctx.rotate(logoList[i].angle * Math.PI / 180)
-        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
-        if (activeLogo === logoList[i]) {
+        if (logoList[i].drawType === 'image') {
+          ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+        } else {
+          let {text,x,y,h} = logoList[i];
+          ctx.textBaseline = 'top';
+          ctx.font = `${h}px serif`;
+          ctx.fillText(text,x,y);
+        }
+      if (activeLogo === logoList[i]) {
           if (!activeLogo) return;
           const anchorList = getAnchorList(activeLogo)
           ctx.strokeStyle = '#399';
           ctx.strokeWidth = 2;
           ctx.fillStyle = '#688';
-          let {x, y, w, h} = activeLogo;
+          let { x, y, w, h } = activeLogo;
           ctx.strokeRect(x, y, w, h);
           anchorList.forEach(anchor => {
-            let {x, y, w, h} = anchor;
+            let { x, y, w, h } = anchor;
             ctx.fillRect(x, y, w, h);
           })
         }
@@ -68,7 +75,7 @@ const AppMain = props => {
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [activeLogo, img, logoList, logoList.length, name, setBgImage]);
   function getAnchorList(rect) {
-    let {x, y, w, h} = rect;
+    let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
     let centerX = x + w / 2 - ANCHOR_WIDTH / 2;
     let rightX = x + w - ANCHOR_WIDTH / 2;
@@ -131,7 +138,7 @@ const AppMain = props => {
   function getActionType(mx, my) {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
-    let rect = Object.assign({}, activeLogo, {type: 1})
+    let rect = Object.assign({}, activeLogo, { type: 1 })
     rectList.push(rect);
     rectList.push(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
@@ -156,7 +163,7 @@ const AppMain = props => {
     let [x, y] = getPos(e);
     let action = getActionType(x, y);
     console.log(action);
-    
+
     if (action) {
       switch (action) {
         case ACTION.TOP_LEFT_RESIZE: {
@@ -218,8 +225,8 @@ const AppMain = props => {
   }
   function verticalResize(e) {
     let [x, y] = getPos(e);
-    let {cx, cy} = activeLogo;
-    let h = getDistance([x,y], [cx,cy]);
+    let { cx, cy } = activeLogo;
+    let h = getDistance([x, y], [cx, cy]);
     activeLogo.y = cy - h;
     activeLogo.h = h * 2;
 
@@ -227,8 +234,8 @@ const AppMain = props => {
   }
   function horizontalResize(e) {
     let [x, y] = getPos(e);
-    let {cx, cy} = activeLogo;
-    let w = getDistance([x,y], [cx,cy]);
+    let { cx, cy } = activeLogo;
+    let w = getDistance([x, y], [cx, cy]);
     activeLogo.x = cx - w;
     activeLogo.w = w * 2;
     // let dx = x - activeLogo.anchorX;
@@ -244,13 +251,13 @@ const AppMain = props => {
     draw2();
   }
   function topLeftResize(e) {
-    let {w, h, cx, cy} = activeLogo;
-    let [x,y] = getPos(e);
-    let dis = getDistance([x,y], [cx,cy]);
+    let { w, h, cx, cy } = activeLogo;
+    let [x, y] = getPos(e);
+    let dis = getDistance([x, y], [cx, cy]);
     let dis2 = dis * dis;
     let bottom = (1 + (w * w) / (h * h))
     let height = Math.sqrt(dis2 / bottom)
-    let width = height *  w / h;
+    let width = height * w / h;
     activeLogo.x = cx - width;
     activeLogo.y = cy - height;
     activeLogo.w = width * 2;
@@ -258,7 +265,7 @@ const AppMain = props => {
     draw2();
   }
   function freeResize(e) {
-    let [x,y] = getPos(e);
+    let [x, y] = getPos(e);
     let dx = x - activeLogo.anchorX;
     let dy = y - activeLogo.anchorY;
     if (dx < 0 && dy < 0) {
@@ -290,7 +297,7 @@ const AppMain = props => {
     let cx = x + activeLogo.w / 2;
     let cy = y + activeLogo.h / 2;
     // console.log(x,y,cx,cy);
-    
+
     activeLogo.x = x;
     activeLogo.y = y;
     activeLogo.cx = cx;
@@ -322,24 +329,29 @@ const AppMain = props => {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
       let cx = logoList[i].x + logoList[i].w / 2;
-      // let cx = canvas.width /2;
-      // let cy = canvas.height /2;
       let cy = logoList[i].y + logoList[i].h / 2;
       ctx.translate(cx, cy);
       ctx.rotate(logoList[i].angle * Math.PI / 180)
       ctx.translate(-cx, -cy);
-      ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      if (logoList[i].drawType === 'image') {
+        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      } else if (logoList[i].drawType === 'text') {
+        let {text, x, y, h} = logoList[i];
+        ctx.textBaseline = 'top';
+        ctx.font = `${h}px serif`;
+        ctx.fillText(text, x, y)
+      }
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
       }
-    ctx.restore();
+      ctx.restore();
     }
   }
   function handleMouseMove(e) {
     if (!activeLogo) return;
     if (!activeAction) return;
     switch (activeAction) {
-      case ACTION.TOP_LEFT_RESIZE:{
+      case ACTION.TOP_LEFT_RESIZE: {
         topLeftResize(e);
         break;
       }
@@ -377,11 +389,11 @@ const AppMain = props => {
     // let {x, y, w, h} = activeLogo;
     // let cx = x + w * 0.5;
     // let canvas= document.querySelector('.app__bg');
-    let {x, y, w, h} = activeLogo;
+    let { x, y, w, h } = activeLogo;
     // let w = canvas.width;
     // let h = canvas.height;
     // let cy = y + h * 0.5;
-    function getRad(p1,p2) {
+    function getRad(p1, p2) {
       let x = p1[0] - p2[0];
       let y = p2[1] - p1[1];
       return Math.atan2(y, x);
@@ -401,10 +413,10 @@ const AppMain = props => {
     ctx.strokeStyle = '#399';
     ctx.strokeWidth = 2;
     ctx.fillStyle = '#688';
-    let {x, y, w, h} = activeLogo;
+    let { x, y, w, h } = activeLogo;
     ctx.strokeRect(x, y, w, h);
     anchorList.forEach(anchor => {
-      let {x, y, w, h} = anchor;
+      let { x, y, w, h } = anchor;
       ctx.fillRect(x, y, w, h);
     })
   }
