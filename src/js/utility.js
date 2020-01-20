@@ -12,7 +12,7 @@ function getPoint(x, y, cx, cy, angle) {
   return [nx, ny];
 }
 
-function getDistance(p1, p2) {
+export function getDistance(p1, p2) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
 }
 
@@ -51,8 +51,11 @@ export function isInsideRect(p, cx, cy, rect, angle) {
 
   let rectArea = w * h;
   let calcArea = a1 + a2 + a3 + a4;
+  // console.log(rectArea, calcArea);
+  // console.log(p, cx, cy, rect, angle);
+  // console.log(p1,p2,p3,p4);
+  
   let diff = Math.abs(calcArea - rectArea);
-  console.log('diff', diff);
   let precision = 1e-6;
   return diff < precision;
 }
@@ -90,3 +93,25 @@ export function renderImage(file, callback) {
   });
   reader.readAsDataURL(file);
 }
+
+export function loadImg(src, name, callback) {
+  let img = new Image();
+  img.addEventListener('load', (e) => {
+    callback(img, name);
+  })
+  img.src = src;
+}
+
+export function getDeg(p1, p2) {
+  let rad = getRad(p1, p2);
+  let deg = rad2deg(rad);
+  return deg;
+}
+export function getRad(p1, p2) {
+  let x = p1[0] - p2[0];
+  let y = p2[1] - p1[1];
+  return Math.atan2(y, x);
+}
+export function rad2deg(rad) {
+  return rad * 180 / Math.PI;
+} 

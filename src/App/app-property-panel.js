@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { OBJECT_TYPE } from '../js/enum';
 
 function PropertyPanel(props) {
   const { activeLogo, bgImage, logoList } = props;
-  
+
   const [opacity, setOpacity] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
-  
+
   function handleOpactiyChange(e) {
     let value = e.target.value;
     activeLogo.opacity = value / 100;
@@ -16,7 +17,20 @@ function PropertyPanel(props) {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
-      ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      switch (logoList[i].objectType) {
+        case OBJECT_TYPE.TEXT:
+          let { text, x, y, h } = logoList[i];
+          let font = `${h}px serif`;
+          ctx.textBaseline = 'top';
+          ctx.font = font;
+          ctx.fillText(text, x, y);
+          break;
+        case OBJECT_TYPE.IMAGE:
+          ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+          break
+        default:
+          break;
+      }
       ctx.restore();
     }
   }

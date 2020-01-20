@@ -8,10 +8,22 @@ export const ACTION = {
   CENTER_RIGHT_RESIZE: 6,
   BOTTOM_LEFT_RESIZE: 7,
   BOTTOM_CENTER_RESIZE: 8,
-  BOTTOM_RIGHT_RESIZE: 9
+  BOTTOM_RIGHT_RESIZE: 9,
+  ROTATE: 10
 }
 
 export const PAGE_STAGE = {
   WELCOME: 1,
   EDIT: 2,
+}
+
+export const OBJECT_TYPE = {
+  TEXT: 1,
+  IMAGE: 2
+}
+
+export const OUTLINE_STYLE = {
+  FILL: '#688',
+  STROKE: '#399',
+  WIDTH: 2,
 }

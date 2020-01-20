@@ -23,7 +23,7 @@ function App() {
     activeLogo,
     setActiveLogo,
     activeAction,
-    setActiveAction
+    setActiveAction,
   };
   return (
     <div className="app">

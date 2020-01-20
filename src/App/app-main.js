@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 
-import { isInsideRect } from '../js/utility';
-import { ACTION } from '../js/enum';
+import { isInsideRect, getDistance, getDeg } from '../js/utility';
+import { ACTION, OBJECT_TYPE, OUTLINE_STYLE } from '../js/enum';
 
 const AppMain = props => {
   const {
+    logoList,
     bgImage,
     setBgImage,
-    logoList,
     activeLogo,
     setActiveLogo,
     activeAction,
-    setActiveAction
+    setActiveAction,
   } = props;
   const { img, name, scale } = bgImage;
   const ANCHOR_WIDTH = 10;
@@ -44,9 +44,9 @@ const AppMain = props => {
     handleWindowResize();
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage]);
+  }, [img, name, setBgImage, logoList]);
   function getAnchorList(rect) {
-    let {x, y, w, h} = rect;
+    let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
     let centerX = x + w / 2 - ANCHOR_WIDTH / 2;
     let rightX = x + w - ANCHOR_WIDTH / 2;
@@ -94,6 +94,11 @@ const AppMain = props => {
         y: bottomY,
         type: ACTION.BOTTOM_RIGHT_RESIZE
       },
+      {
+        x: centerX,
+        y: topY - 50,
+        type: ACTION.ROTATE
+      }
     ]
     anchorList.forEach(anchor => {
       anchor.w = ANCHOR_WIDTH;
@@ -104,8 +109,12 @@ const AppMain = props => {
   function getActionType(mx, my) {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
+    let rect = Object.assign({}, activeLogo, { type: ACTION.MOVE })
+    rectList.push(rect);
+    rectList.push(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
-      if (isInsideRect([mx, my], bgImage.img.naturalWidth / 2, bgImage.img.naturalHeight / 2, rectList[i], 0)) {
+      let { cx, cy, angle } = activeLogo;
+      if (isInsideRect([mx, my], cx, cy, rectList[i], angle)) {
         return rectList[i].type
       }
     }
@@ -124,6 +133,7 @@ const AppMain = props => {
   function handleMouseDown(e) {
     let [x, y] = getPos(e);
     let action = getActionType(x, y);
+
     if (action) {
       switch (action) {
         case ACTION.TOP_LEFT_RESIZE: {
@@ -174,11 +184,9 @@ const AppMain = props => {
     }
     for (let i = logoList.length - 1; i >= 0; i -= 1) {
       let logo = logoList[i];
+      let { cx, cy, angle } = logo;
       if (
-        x >= logo.x &&
-        x <= logo.w + logo.x &&
-        y >= logo.y &&
-        y <= logo.h + logo.y
+        isInsideRect([x, y], cx, cy, logo, angle)
       ) {
         setActiveLogo(logo);
         setActiveAction(ACTION.MOVE);
@@ -187,61 +195,46 @@ const AppMain = props => {
     }
   }
   function verticalResize(e) {
-    let [, y] = getPos(e);
-    let dy = y - activeLogo.anchorY;
-    if (dy < 0) {
-      activeLogo.y = y;
-      activeLogo.h = -dy;
-    } else {
-      activeLogo.h = dy;
-      activeLogo.y = activeLogo.anchorY;
-    }
+    let [x, y] = getPos(e);
+    let { cx, cy } = activeLogo;
+    let h = getDistance([x, y], [cx, cy]);
+    activeLogo.y = cy - h;
+    activeLogo.h = h * 2;
+
     draw();
   }
   function horizontalResize(e) {
-    let [x] = getPos(e);
-    let dx = x - activeLogo.anchorX;
-    if (dx < 0) {
-      activeLogo.x = x;
-      activeLogo.w = -dx;
-    } else {
-      activeLogo.w = dx;
-      activeLogo.x = activeLogo.anchorX;
-    }
+    let [x, y] = getPos(e);
+    let { cx, cy } = activeLogo;
+    let w = getDistance([x, y], [cx, cy]);
+    activeLogo.x = cx - w;
+    activeLogo.w = w * 2;
     draw();
   }
-  function freeResize(e) {
-    let [x,y] = getPos(e);
-    let dx = x - activeLogo.anchorX;
-    let dy = y - activeLogo.anchorY;
-    if (dx < 0 && dy < 0) {
-      activeLogo.w = -dx;
-      activeLogo.h = -dy;
-      activeLogo.x = x;
-      activeLogo.y = y;
-    } else if (dx < 0 && dy > 0) {
-      activeLogo.w = -dx;
-      activeLogo.h = dy;
-      activeLogo.x = x;
-      activeLogo.y = activeLogo.anchorY;
-    } else if (dx > 0 && dy < 0) {
-      activeLogo.h = -dy;
-      activeLogo.w = dx;
-      activeLogo.y = y;
-      activeLogo.x = activeLogo.anchorX;
-    } else if (dx > 0 && dy > 0) {
-      activeLogo.h = dy;
-      activeLogo.w = dx;
-      activeLogo.x = activeLogo.anchorX;
-      activeLogo.y = activeLogo.anchorY;
-    }
+  function diagonalResize(e) {
+    let { w, h, cx, cy } = activeLogo;
+    let [x, y] = getPos(e);
+    let dis = getDistance([x, y], [cx, cy]);
+    // 直角三角形，已知对角线长度以及另外两边的长度比例，求另外两边长度
+    let dis2 = dis * dis;
+    let bottom = (1 + (w * w) / (h * h))
+    let height = Math.sqrt(dis2 / bottom)
+    let width = height * w / h;
+    activeLogo.x = cx - width;
+    activeLogo.y = cy - height;
+    activeLogo.w = width * 2;
+    activeLogo.h = height * 2;
     draw();
   }
   function move(e) {
     let x = activeLogo.x + e.movementX / scale;
     let y = activeLogo.y + e.movementY / scale;
+    let cx = x + activeLogo.w / 2;
+    let cy = y + activeLogo.h / 2;
     activeLogo.x = x;
     activeLogo.y = y;
+    activeLogo.cx = cx;
+    activeLogo.cy = cy;
     draw();
   }
   function draw() {
@@ -252,7 +245,19 @@ const AppMain = props => {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
-      ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      let cx = logoList[i].x + logoList[i].w / 2;
+      let cy = logoList[i].y + logoList[i].h / 2;
+      ctx.translate(cx, cy);
+      ctx.rotate(logoList[i].angle * Math.PI / 180)
+      ctx.translate(-cx, -cy);
+      if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
+        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
+      } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
+        let { text, x, y, h } = logoList[i];
+        ctx.textBaseline = 'top';
+        ctx.font = `${h}px serif`;
+        ctx.fillText(text, x, y)
+      }
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
       }
@@ -267,7 +272,7 @@ const AppMain = props => {
       case ACTION.TOP_RIGHT_RESIZE:
       case ACTION.BOTTOM_LEFT_RESIZE:
       case ACTION.BOTTOM_RIGHT_RESIZE: {
-        freeResize(e);
+        diagonalResize(e);
         break;
       }
       case ACTION.CENTER_LEFT_RESIZE:
@@ -282,22 +287,35 @@ const AppMain = props => {
       }
       case ACTION.MOVE: {
         move(e);
+        break;
+      }
+      case ACTION.ROTATE: {
+        rotate(e);
+        break;
       }
       default: {
         break;
       }
     }
   }
+  function rotate(e) {
+    let [mx, my] = getPos(e);
+    let { x, y, w, h } = activeLogo;
+    let angle = getDeg([mx, my], [x + w / 2, y + h / 2]);
+    let fixedAngle = -(angle - 90);
+    activeLogo.angle = fixedAngle;
+    draw();
+  }
   function drawOutline(ctx) {
     if (!activeLogo) return;
     const anchorList = getAnchorList(activeLogo)
-    ctx.strokeStyle = '#399';
-    ctx.strokeWidth = 2;
-    ctx.fillStyle = '#688';
-    let {x, y, w, h} = activeLogo;
+    ctx.fillStyle = OUTLINE_STYLE.FILL;
+    ctx.strokeStyle = OUTLINE_STYLE.STROKE;
+    ctx.strokeWidth = OUTLINE_STYLE.WIDTH;
+    let { x, y, w, h } = activeLogo;
     ctx.strokeRect(x, y, w, h);
     anchorList.forEach(anchor => {
-      let {x, y, w, h} = anchor;
+      let { x, y, w, h } = anchor;
       ctx.fillRect(x, y, w, h);
     })
   }
