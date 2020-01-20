@@ -101,3 +101,17 @@ export function loadImg(src, name, callback) {
   })
   img.src = src;
 }
+
+export function getDeg(p1, p2) {
+  let rad = getRad(p1, p2);
+  let deg = rad2deg(rad);
+  return deg;
+}
+export function getRad(p1, p2) {
+  let x = p1[0] - p2[0];
+  let y = p2[1] - p1[1];
+  return Math.atan2(y, x);
+}
+export function rad2deg(rad) {
+  return rad * 180 / Math.PI;
+} 

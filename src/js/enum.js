@@ -16,3 +16,14 @@ export const PAGE_STAGE = {
   WELCOME: 1,
   EDIT: 2,
 }
+
+export const OBJECT_TYPE = {
+  TEXT: 1,
+  IMAGE: 2
+}
+
+export const OUTLINE_STYLE = {
+  FILL: '#688',
+  STROKE: '#399',
+  WIDTH: 2,
+}

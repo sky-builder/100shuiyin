@@ -9,7 +9,6 @@ import AppBody from './app-body';
 function App() {
   const [bgImage, setBgImage] = useState();
   const [logoList, setLogoList] = useState([]);
-  const [textList, setTextList] = useState([])
   const [pageStage, setPageStage] = useState(PAGE_STAGE.WELCOME);
   const [activeLogo, setActiveLogo] = useState(null);
   const [activeAction, setActiveAction] = useState(ACTION.NONE);
@@ -25,8 +24,6 @@ function App() {
     setActiveLogo,
     activeAction,
     setActiveAction,
-    textList,
-    setTextList
   };
   return (
     <div className="app">

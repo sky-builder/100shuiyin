@@ -27,6 +27,7 @@ const AppWelcome = props => {
         if (!e.target.files || !e.target.files[0]) return;
         renderImage(e.target.files[0], loadBg);
     }
+    // use this function to jump to stage 2 quickly
     // loadImg('https://picsum.photos/500', '123', loadBg)
     function loadBg(img, name) {
         let appBody = document.querySelector('.app__body');
@@ -43,16 +44,6 @@ const AppWelcome = props => {
         });
         props.setPageStage(PAGE_STAGE.EDIT);
     }
-    // use this function to jump to stage 2 quickly
-    // loadbg2();
-    // function loadbg2() {
-    //   let url = 'https://picsum.photos/400';
-    //   let img = new Image();
-    //   img.src = url;
-    //   img.addEventListener('load', () => {
-    //       loadbg(img, new Date().getTime());
-    //   });
-    // }
     return (
         <div
             className="app__welcome"
