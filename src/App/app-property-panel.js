@@ -109,6 +109,26 @@ function PropertyPanel(props) {
       logoList.splice(index, 1, newLogo);
     }
   }
+  function handleStrokeWidthChange(e) {
+    if (!activeLogo) return;
+    activeLogo.strokeWidth = +e.target.value;
+    let index = logoList.findIndex(item => item.id === activeLogo.id);
+    if (index !== -1) {
+      let newLogo = Object.assign({}, activeLogo);
+      setActiveLogo(newLogo);
+      logoList.splice(index, 1, newLogo);
+    }
+  }
+  function handleStrokeColorChange(e) {
+    if (!activeLogo) return;
+    activeLogo.strokeStyle = e.target.value;
+    let index = logoList.findIndex(item => item.id === activeLogo.id);
+    if (index !== -1) {
+      let newLogo = Object.assign({}, activeLogo);
+      setActiveLogo(newLogo);
+      logoList.splice(index, 1, newLogo);
+    }
+  }
   return (
     <div className="app__property-panel">
       <div className="">
@@ -126,6 +146,15 @@ function PropertyPanel(props) {
       <div className="">
         <label htmlFor="js-font-bg-color-input" className="">font size</label>
         <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
+      </div>
+      <h3>Stroke</h3>
+      <div className="">
+        <label htmlFor="js-font-stroke-width-input" className="">Width</label>
+        <input id="js-font-stroke-width-input" type="number" className="input" onChange={evt => handleStrokeWidthChange(evt)} />
+      </div>
+      <div className="">
+        <label htmlFor="js-font-stroke-color-input" className="">Color</label>
+        <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
       </div>
       <div className="input-group">
         <label htmlFor="opacity-input">透明度</label>

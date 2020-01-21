@@ -54,7 +54,7 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, cx, cy, color, bgColor } = logoList[i];
+        let { text, x, y, h, w, cx, cy, color, bgColor, strokeWidth, strokeStyle } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${parseInt(h)}px serif`;
         w = ctx.measureText(text).width;
@@ -65,6 +65,9 @@ const AppMain = props => {
         ctx.fillRect(x, y, w, h);
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeText(text,x,y,w);
       }
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
