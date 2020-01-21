@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { isInsideRect, getDistance, getDeg } from '../js/utility';
-import { ACTION, OBJECT_TYPE, OUTLINE_STYLE } from '../js/enum';
+import { ACTION, OBJECT_TYPE, OUTLINE_STYLE, SCALE_TYPE } from '../js/enum';
 
 const AppMain = props => {
   const {
@@ -13,7 +13,7 @@ const AppMain = props => {
     activeAction,
     setActiveAction
   } = props;
-  const { img, name, scale } = bgImage;
+  const { img, name, scale, scaleType } = bgImage;
   const ANCHOR_WIDTH = 10;
   const ANCHOR_HEIGHT = 10;
   const drawOutline = useCallback(
@@ -71,29 +71,39 @@ const AppMain = props => {
       let nh = img.naturalHeight;
       let canvas = document.querySelector('.app__bg');
       let appBody = document.querySelector('.app__main');
-      let bw = appBody.offsetWidth;
-      let bh = appBody.offsetHeight;
+      let bw = appBody.clientWidth;
+      let bh = appBody.clientHeight;
       let s1 = bw / nw;
       let s2 = bh / nh;
-      let newScale = Math.min(s1, s2);
-      if (newScale > 1) newScale = 1;
+      let newScale;
+      if (scaleType === SCALE_TYPE.FIT_HEIGHT) {
+        newScale = s2;
+      } else if (scaleType === SCALE_TYPE.FIT_WIDTH) {
+        newScale = s1;
+      } else if (scaleType === SCALE_TYPE.NATURAL) {
+        newScale = 1;
+      }
       setBgImage({
         img: img,
         name: name,
-        scale: newScale
+        scale: newScale,
+        scaleType: scaleType
       });
       canvas.width = nw;
       canvas.height = nh;
-      if (newScale < 1) {
-        canvas.style.width = nw * newScale + 'px';
-        canvas.style.height = nh * newScale + 'px';
-      }
+      canvas.style.width = nw * newScale + 'px';
+      canvas.style.height = nh * newScale + 'px';
+      let newWidth = nw * newScale;
+      let newHeight = nh * newScale;
+      let tx = bw > newWidth ? (bw - newWidth) / 2 : 0;
+      let ty = bh > newHeight ? (bh - newHeight) / 2 : 0;
+      canvas.style.transform = `translate(${tx}px, ${ty}px)`
       draw();
     }
     handleWindowResize();
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage, logoList, draw]);
+  }, [img, name, setBgImage, logoList, draw, scaleType]);
   function getAnchorList(rect) {
     let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;

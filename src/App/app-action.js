@@ -1,5 +1,5 @@
 import React from 'react';
-import { PAGE_STAGE, ACTION, OBJECT_TYPE } from '../js/enum';
+import { PAGE_STAGE, ACTION, OBJECT_TYPE, SCALE_TYPE } from '../js/enum';
 import { exportCanvas } from '../js/utility';
 
 const AppAction = props => {
@@ -112,9 +112,33 @@ const AppAction = props => {
     props.setLogoId(props.logoId + 1);
     return obj;
   }
+  function changeScaleType(scaleType) {
+    props.setBgImage({
+      ...props.bgImage,
+      scaleType
+    })
+  }
   if (props.pageStage === PAGE_STAGE.EDIT) {
     return (
       <div className="app__action">
+        <button
+          className="app__fit-height button"
+          onClick={() => changeScaleType(SCALE_TYPE.FIT_HEIGHT)}
+        >
+          fit height
+        </button>
+        <button
+          className="app__fit-height button"
+          onClick={() => changeScaleType(SCALE_TYPE.FIT_WIDTH)}
+        >
+          fit width
+        </button>
+        <button
+          className="app__fit-height button"
+          onClick={() => changeScaleType(SCALE_TYPE.NATURAL)}
+        >
+          natural
+        </button>
         <button
           className="app__delete button is-danger"
           onClick={toWelcomeStage}

@@ -27,3 +27,9 @@ export const OUTLINE_STYLE = {
   STROKE: '#399',
   WIDTH: 2,
 }
+
+export const SCALE_TYPE = {
+  FIT_HEIGHT: 1,
+  FIT_WIDTH: 2,
+  NATURAL: 3
+}
