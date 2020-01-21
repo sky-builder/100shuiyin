@@ -13,7 +13,7 @@ const AppMain = props => {
     activeAction,
     setActiveAction
   } = props;
-  const { img, name, scale, scaleType } = bgImage;
+  const { img, name, scale, scaleType, actionType } = bgImage;
   const ANCHOR_WIDTH = 10;
   const ANCHOR_HEIGHT = 10;
   const drawOutline = useCallback(
@@ -94,8 +94,41 @@ const AppMain = props => {
         img: img,
         name: name,
         scale: newScale,
-        scaleType: scaleType
+        scaleType: scaleType,
+        actionType: actionType
       });
+      let cursor = 'default';
+      switch (actionType) {
+        case ACTION.MOVE: {
+          cursor = 'move';
+          break;
+        }
+        case ACTION.TOP_LEFT_RESIZE:
+        case ACTION.BOTTOM_RIGHT_RESIZE: {
+          cursor = 'se-resize';
+          break;
+        }
+        case ACTION.TOP_RIGHT_RESIZE:
+        case ACTION.BOTTOM_LEFT_RESIZE: {
+          cursor = 'sw-resize';
+          break;
+        }
+        case ACTION.CENTER_LEFT_RESIZE:
+        case ACTION.CENTER_RIGHT_RESIZE: {
+          cursor = 'e-resize';
+          break;
+        }
+        case ACTION.TOP_CENTER_RESIZE:
+        case ACTION.BOTTOM_CENTER_RESIZE: {
+          cursor = 's-resize';
+          break;
+        }
+        case ACTION.ROTATE: {
+          cursor = 'crosshair'
+          break;
+        }
+      }
+      canvas.style.cursor = cursor;
       canvas.width = nw;
       canvas.height = nh;
       canvas.style.width = nw * newScale + 'px';
@@ -110,7 +143,7 @@ const AppMain = props => {
     handleWindowResize();
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage, logoList, draw, scaleType]);
+  }, [img, name, setBgImage, logoList, draw, scaleType, actionType]);
   function getAnchorList(rect) {
     let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
@@ -211,7 +244,9 @@ const AppMain = props => {
   function handleMouseDown(e) {
     let [x, y] = getPos(e);
     let action = getActionType(x, y);
-
+    setBgImage({
+      img, name, scale, scaleType, actionType: action
+    })
     if (action) {
       switch (action) {
         case ACTION.TOP_LEFT_RESIZE: {
@@ -381,6 +416,13 @@ const AppMain = props => {
 
   function handleMouseUp(e) {
     setActiveAction(ACTION.NONE);
+    setBgImage({
+      img,
+      name,
+      scale,
+      actionType: ACTION.NONE,
+      scaleType
+    })
   }
   return (
     <div className="app__main">

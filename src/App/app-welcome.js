@@ -1,4 +1,4 @@
-import { PAGE_STAGE, SCALE_TYPE } from '../js/enum';
+import { PAGE_STAGE, SCALE_TYPE, ACTION } from '../js/enum';
 import React from 'react';
 
 import { renderImage, loadImg } from '../js/utility';
@@ -40,7 +40,8 @@ const AppWelcome = props => {
       img,
       name,
       scale,
-      scaleType: SCALE_TYPE.FIT_HEIGHT
+      scaleType: SCALE_TYPE.FIT_HEIGHT,
+      actionType: ACTION.NONE
     });
     props.setPageStage(PAGE_STAGE.EDIT);
   }
