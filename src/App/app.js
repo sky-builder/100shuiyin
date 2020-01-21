@@ -12,6 +12,7 @@ function App() {
   const [pageStage, setPageStage] = useState(PAGE_STAGE.WELCOME);
   const [activeLogo, setActiveLogo] = useState(null);
   const [activeAction, setActiveAction] = useState(ACTION.NONE);
+  const [logoId, setLogoId] = useState(1); 
 
   let chidlProps = {
     bgImage,
@@ -24,6 +25,8 @@ function App() {
     setActiveLogo,
     activeAction,
     setActiveAction,
+    logoId,
+    setLogoId,
   };
   return (
     <div className="app">

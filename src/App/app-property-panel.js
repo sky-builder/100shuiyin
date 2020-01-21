@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { OBJECT_TYPE } from '../js/enum';
+import { OBJECT_TYPE, ACTION } from '../js/enum';
 
 function PropertyPanel(props) {
-  const { activeLogo, bgImage, logoList } = props;
+  const {
+    bgImage,
+    activeLogo,
+    setActiveLogo,
+    logoList,
+    setLogoList,
+    setActiveAction
+  } = props;
 
   const [opacity, setOpacity] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -26,12 +33,29 @@ function PropertyPanel(props) {
           ctx.fillText(text, x, y);
           break;
         case OBJECT_TYPE.IMAGE:
-          ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
-          break
+          ctx.drawImage(
+            logoList[i].img,
+            logoList[i].x,
+            logoList[i].y,
+            logoList[i].w,
+            logoList[i].h
+          );
+          break;
         default:
           break;
       }
       ctx.restore();
+    }
+  }
+  function removeLogo() {
+    if (!activeLogo) return;
+    let { id } = activeLogo;
+    let index = logoList.findIndex(item => item.id === id);
+    if (index !== -1) {
+      logoList.splice(index, 1);
+      setLogoList(logoList);
+      setActiveLogo(null);
+      setActiveAction(ACTION.NONE);
     }
   }
   useEffect(() => {
@@ -70,11 +94,12 @@ function PropertyPanel(props) {
       <button
         className="app__remove-logo button is-danger"
         disabled={isDisabled}
+        onClick={removeLogo}
       >
         remove logo
       </button>
     </div>
   );
-};
+}
 
 export default PropertyPanel;

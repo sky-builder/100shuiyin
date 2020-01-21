@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import { isInsideRect, getDistance, getDeg } from '../js/utility';
 import { ACTION, OBJECT_TYPE, OUTLINE_STYLE } from '../js/enum';
@@ -11,11 +11,60 @@ const AppMain = props => {
     activeLogo,
     setActiveLogo,
     activeAction,
-    setActiveAction,
+    setActiveAction
   } = props;
   const { img, name, scale } = bgImage;
   const ANCHOR_WIDTH = 10;
   const ANCHOR_HEIGHT = 10;
+  const drawOutline = useCallback(
+    ctx => {
+      if (!activeLogo) return;
+      const anchorList = getAnchorList(activeLogo);
+      ctx.fillStyle = OUTLINE_STYLE.FILL;
+      ctx.strokeStyle = OUTLINE_STYLE.STROKE;
+      ctx.strokeWidth = OUTLINE_STYLE.WIDTH;
+      let { x, y, w, h } = activeLogo;
+      ctx.strokeRect(x, y, w, h);
+      anchorList.forEach(anchor => {
+        let { x, y, w, h } = anchor;
+        ctx.fillRect(x, y, w, h);
+      });
+    },
+    [activeLogo]
+  );
+  const draw = useCallback(() => {
+    let canvas = document.querySelector('.app__bg');
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    for (let i = 0; i < logoList.length; i += 1) {
+      ctx.save();
+      ctx.globalAlpha = logoList[i].opacity || 1;
+      let cx = logoList[i].x + logoList[i].w / 2;
+      let cy = logoList[i].y + logoList[i].h / 2;
+      ctx.translate(cx, cy);
+      ctx.rotate((logoList[i].angle * Math.PI) / 180);
+      ctx.translate(-cx, -cy);
+      if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
+        ctx.drawImage(
+          logoList[i].img,
+          logoList[i].x,
+          logoList[i].y,
+          logoList[i].w,
+          logoList[i].h
+        );
+      } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
+        let { text, x, y, h } = logoList[i];
+        ctx.textBaseline = 'top';
+        ctx.font = `${h}px serif`;
+        ctx.fillText(text, x, y);
+      }
+      if (activeLogo === logoList[i]) {
+        drawOutline(ctx);
+      }
+      ctx.restore();
+    }
+  }, [activeLogo, drawOutline, img, logoList]);
   useEffect(() => {
     function handleWindowResize() {
       let nw = img.naturalWidth;
@@ -44,7 +93,7 @@ const AppMain = props => {
     handleWindowResize();
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage, logoList]);
+  }, [img, name, setBgImage, logoList, draw]);
   function getAnchorList(rect) {
     let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
@@ -87,7 +136,7 @@ const AppMain = props => {
       {
         x: centerX,
         y: bottomY,
-        type: ACTION.BOTTOM_CENTER_RESIZE,
+        type: ACTION.BOTTOM_CENTER_RESIZE
       },
       {
         x: rightX,
@@ -99,23 +148,23 @@ const AppMain = props => {
         y: topY - 50,
         type: ACTION.ROTATE
       }
-    ]
+    ];
     anchorList.forEach(anchor => {
       anchor.w = ANCHOR_WIDTH;
       anchor.h = ANCHOR_HEIGHT;
-    })
+    });
     return anchorList;
   }
   function getActionType(mx, my) {
     if (!activeLogo) return;
     let rectList = getAnchorList(activeLogo);
-    let rect = Object.assign({}, activeLogo, { type: ACTION.MOVE })
+    let rect = Object.assign({}, activeLogo, { type: ACTION.MOVE });
     rectList.push(rect);
     rectList.push(activeLogo);
     for (let i = 0; i < rectList.length; i += 1) {
       let { cx, cy, angle } = activeLogo;
       if (isInsideRect([mx, my], cx, cy, rectList[i], angle)) {
-        return rectList[i].type
+        return rectList[i].type;
       }
     }
     return ACTION.NONE;
@@ -185,9 +234,7 @@ const AppMain = props => {
     for (let i = logoList.length - 1; i >= 0; i -= 1) {
       let logo = logoList[i];
       let { cx, cy, angle } = logo;
-      if (
-        isInsideRect([x, y], cx, cy, logo, angle)
-      ) {
+      if (isInsideRect([x, y], cx, cy, logo, angle)) {
         setActiveLogo(logo);
         setActiveAction(ACTION.MOVE);
         return;
@@ -217,9 +264,9 @@ const AppMain = props => {
     let dis = getDistance([x, y], [cx, cy]);
     // 直角三角形，已知对角线长度以及另外两边的长度比例，求另外两边长度
     let dis2 = dis * dis;
-    let bottom = (1 + (w * w) / (h * h))
-    let height = Math.sqrt(dis2 / bottom)
-    let width = height * w / h;
+    let bottom = 1 + (w * w) / (h * h);
+    let height = Math.sqrt(dis2 / bottom);
+    let width = (height * w) / h;
     activeLogo.x = cx - width;
     activeLogo.y = cy - height;
     activeLogo.w = width * 2;
@@ -236,33 +283,6 @@ const AppMain = props => {
     activeLogo.cx = cx;
     activeLogo.cy = cy;
     draw();
-  }
-  function draw() {
-    let canvas = document.querySelector('.app__bg');
-    let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
-    for (let i = 0; i < logoList.length; i += 1) {
-      ctx.save();
-      ctx.globalAlpha = logoList[i].opacity || 1;
-      let cx = logoList[i].x + logoList[i].w / 2;
-      let cy = logoList[i].y + logoList[i].h / 2;
-      ctx.translate(cx, cy);
-      ctx.rotate(logoList[i].angle * Math.PI / 180)
-      ctx.translate(-cx, -cy);
-      if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
-        ctx.drawImage(logoList[i].img, logoList[i].x, logoList[i].y, logoList[i].w, logoList[i].h);
-      } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h } = logoList[i];
-        ctx.textBaseline = 'top';
-        ctx.font = `${h}px serif`;
-        ctx.fillText(text, x, y)
-      }
-      if (activeLogo === logoList[i]) {
-        drawOutline(ctx);
-      }
-      ctx.restore();
-    }
   }
   function handleMouseMove(e) {
     if (!activeLogo) return;
@@ -306,19 +326,7 @@ const AppMain = props => {
     activeLogo.angle = fixedAngle;
     draw();
   }
-  function drawOutline(ctx) {
-    if (!activeLogo) return;
-    const anchorList = getAnchorList(activeLogo)
-    ctx.fillStyle = OUTLINE_STYLE.FILL;
-    ctx.strokeStyle = OUTLINE_STYLE.STROKE;
-    ctx.strokeWidth = OUTLINE_STYLE.WIDTH;
-    let { x, y, w, h } = activeLogo;
-    ctx.strokeRect(x, y, w, h);
-    anchorList.forEach(anchor => {
-      let { x, y, w, h } = anchor;
-      ctx.fillRect(x, y, w, h);
-    })
-  }
+
   function handleMouseUp(e) {
     setActiveAction(ACTION.NONE);
   }
