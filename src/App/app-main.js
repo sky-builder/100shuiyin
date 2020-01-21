@@ -54,10 +54,10 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h } = logoList[i];
+        let { text, x, y, h, w } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${h}px serif`;
-        ctx.fillText(text, x, y);
+        ctx.fillText(text, x, y, w);
       }
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
@@ -247,8 +247,21 @@ const AppMain = props => {
     let h = getDistance([x, y], [cx, cy]);
     activeLogo.y = cy - h;
     activeLogo.h = h * 2;
-
+    if (activeLogo.objectType === OBJECT_TYPE.TEXT) {
+      updateTextObjectWidth();
+    }
     draw();
+  }
+  function updateTextObjectWidth() {
+    if (!activeLogo) return;
+    let {h, cx} = activeLogo;
+    let canvas = document.querySelector('.app__bg');
+    let ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = `${h}px serif`;
+    let w =  ctx.measureText(activeLogo.text).width;
+    activeLogo.w = w;
+    activeLogo.x = cx - w / 2;
   }
   function horizontalResize(e) {
     let [x, y] = getPos(e);
