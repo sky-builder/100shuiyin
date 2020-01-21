@@ -54,14 +54,16 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, cx, cy, color } = logoList[i];
+        let { text, x, y, h, w, cx, cy, color, bgColor } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${parseInt(h)}px serif`;
-        ctx.fillStyle = color;
         w = ctx.measureText(text).width;
         logoList[i].x = cx - w / 2;
         logoList[i].y = cy - h / 2;
         logoList[i].w = w;
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
       }
       if (activeLogo === logoList[i]) {

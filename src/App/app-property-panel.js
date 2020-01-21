@@ -99,6 +99,16 @@ function PropertyPanel(props) {
       logoList.splice(index, 1, newLogo);
     }
   }
+  function handleBgColorChange(e) {
+    if (!activeLogo) return;
+    activeLogo.bgColor = e.target.value;
+    let index = logoList.findIndex(item => item.id === activeLogo.id);
+    if (index !== -1) {
+      let newLogo = Object.assign({}, activeLogo);
+      setActiveLogo(newLogo);
+      logoList.splice(index, 1, newLogo);
+    }
+  }
   return (
     <div className="app__property-panel">
       <div className="">
@@ -112,6 +122,10 @@ function PropertyPanel(props) {
       <div className="">
         <label htmlFor="js-font-color-input" className="">font size</label>
         <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
+      </div>
+      <div className="">
+        <label htmlFor="js-font-bg-color-input" className="">font size</label>
+        <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
       </div>
       <div className="input-group">
         <label htmlFor="opacity-input">透明度</label>
