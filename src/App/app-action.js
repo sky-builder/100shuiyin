@@ -1,6 +1,6 @@
 import React from 'react';
 import { PAGE_STAGE, ACTION, OBJECT_TYPE } from '../js/enum';
-import { exportCanvas } from '../js/utility'
+import { exportCanvas } from '../js/utility';
 
 const AppAction = props => {
   function toWelcomeStage() {
@@ -11,7 +11,7 @@ const AppAction = props => {
   }
   function handleLogoChange(e) {
     if (!e.target.files || !e.target.files[0]) return;
-    loadLogo(e.target.files[0])
+    loadLogo(e.target.files[0]);
   }
   function loadLogo(file) {
     let reader = new FileReader();
@@ -30,15 +30,11 @@ const AppAction = props => {
   }
   function addLogo(img) {
     let obj = getImageObject(img);
-    props.setLogoList(
-      props.logoList.concat([
-        obj
-      ])
-    );
+    props.setLogoList(props.logoList.concat([obj]));
   }
   function addText() {
     let obj = getTextObject();
-    props.setLogoList(props.logoList.concat([obj]))
+    props.setLogoList(props.logoList.concat([obj]));
   }
   function exportImage() {
     let canvas = document.querySelector('.app__bg');
@@ -48,7 +44,7 @@ const AppAction = props => {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
     let h = 16;
-    let font = `${h}px serif`
+    let font = `${h}px serif`;
     ctx.font = font;
     let text = 'hello,world';
     let w = ctx.measureText(text).width;
@@ -62,8 +58,10 @@ const AppAction = props => {
       opacity: 1,
       angle: 0,
       cx: w / 2,
-      cy: h / 2
-    }
+      cy: h / 2,
+      id: props.logoId
+    };
+    props.setLogoId(props.logoId + 1);
     return obj;
   }
   function getImageObject(img) {
@@ -80,13 +78,18 @@ const AppAction = props => {
       objectType: OBJECT_TYPE.IMAGE,
       cx: nw / 2,
       cy: nh / 2,
-    }
+      id: props.logoId
+    };
+    props.setLogoId(props.logoId + 1);
     return obj;
   }
   if (props.pageStage === PAGE_STAGE.EDIT) {
     return (
       <div className="app__action">
-        <button className="app__delete button is-danger" onClick={toWelcomeStage}>
+        <button
+          className="app__delete button is-danger"
+          onClick={toWelcomeStage}
+        >
           delete
         </button>
         <button className="app__add-text button is-info" onClick={addText}>
