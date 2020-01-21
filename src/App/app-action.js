@@ -60,9 +60,10 @@ const AppAction = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w } = logoList[i];
+        let { text, x, y, h, w, color } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${h}px serif`;
+        ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
       }
       ctx.restore();
@@ -88,7 +89,8 @@ const AppAction = props => {
       angle: 0,
       cx: w / 2,
       cy: h / 2,
-      id: props.logoId
+      id: props.logoId,
+      color: '#000',
     };
     props.setLogoId(props.logoId + 1);
     return obj;

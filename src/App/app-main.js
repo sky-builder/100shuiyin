@@ -54,9 +54,10 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, cx, cy } = logoList[i];
+        let { text, x, y, h, w, cx, cy, color } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${parseInt(h)}px serif`;
+        ctx.fillStyle = color;
         w = ctx.measureText(text).width;
         logoList[i].x = cx - w / 2;
         logoList[i].y = cy - h / 2;

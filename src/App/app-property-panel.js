@@ -70,11 +70,11 @@ function PropertyPanel(props) {
   function handleTextChange(e) {
     if (!activeLogo) return;
     let text = e.target.value;
-    let canvas=  document.querySelector(".app__bg");
+    let canvas = document.querySelector(".app__bg");
     let ctx = canvas.getContext('2d');
     ctx.save();
     ctx.textBaseline = 'top';
-    ctx.font= `${activeLogo.h}px serif`;
+    ctx.font = `${activeLogo.h}px serif`;
     let w = ctx.measureText(text).width;
     ctx.restore();
     activeLogo.text = text;
@@ -89,15 +89,29 @@ function PropertyPanel(props) {
     activeLogo.y = activeLogo.cy - value / 2;
     props.setLogoList(props.logoList.slice());
   }
+  function handleColorChange(e) {
+    if (!activeLogo) return;
+    activeLogo.color = e.target.value;
+    let index = logoList.findIndex(item => item.id === activeLogo.id);
+    if (index !== -1) {
+      let newLogo = Object.assign({}, activeLogo);
+      setActiveLogo(newLogo);
+      logoList.splice(index, 1, newLogo);
+    }
+  }
   return (
     <div className="app__property-panel">
       <div className="">
         <label htmlFor="js-text-input" className="">text</label>
-        <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)}/>
+        <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)} />
       </div>
       <div className="">
         <label htmlFor="js-font-size-input" className="">font size</label>
-        <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)}/>
+        <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)} />
+      </div>
+      <div className="">
+        <label htmlFor="js-font-color-input" className="">font size</label>
+        <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
       </div>
       <div className="input-group">
         <label htmlFor="opacity-input">透明度</label>
