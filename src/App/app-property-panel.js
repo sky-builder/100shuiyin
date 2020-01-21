@@ -63,6 +63,7 @@ function PropertyPanel(props) {
     setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
     if (activeLogo && activeLogo.objectType === OBJECT_TYPE.TEXT) {
       document.getElementById('js-text-input').value = activeLogo.text
+      document.getElementById('js-font-size-input').value = activeLogo.h;
     }
   }, [activeLogo]);
 
@@ -81,11 +82,23 @@ function PropertyPanel(props) {
     activeLogo.cx = activeLogo.x + activeLogo.w / 2;
     props.setLogoList(props.logoList.slice());
   }
+  function handleFontSizeChange(e) {
+    if (!activeLogo) return;
+    let value = +e.target.value;
+    console.log(value);
+    activeLogo.h = value;
+    activeLogo.y = activeLogo.cy - value / 2;
+    props.setLogoList(props.logoList.slice());
+  }
   return (
     <div className="app__property-panel">
       <div className="">
         <label htmlFor="js-text-input" className="">text</label>
         <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)}/>
+      </div>
+      <div className="">
+        <label htmlFor="js-font-size-input" className="">font size</label>
+        <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)}/>
       </div>
       <div className="input-group">
         <label htmlFor="opacity-input">透明度</label>
