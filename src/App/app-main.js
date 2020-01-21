@@ -153,6 +153,18 @@ const AppMain = props => {
       anchor.w = ANCHOR_WIDTH;
       anchor.h = ANCHOR_HEIGHT;
     });
+    let textAcnhorList = [
+      ACTION.ROTATE,
+      ACTION.TOP_LEFT_RESIZE,
+      ACTION.TOP_RIGHT_RESIZE,
+      ACTION.BOTTOM_LEFT_RESIZE,
+      ACTION.BOTTOM_RIGHT_RESIZE
+    ];
+    if (rect.objectType === OBJECT_TYPE.TEXT) {
+      anchorList = anchorList.filter(item =>
+        textAcnhorList.includes(item.type)
+      );
+    }
     return anchorList;
   }
   function getActionType(mx, my) {
@@ -254,12 +266,12 @@ const AppMain = props => {
   }
   function updateTextObjectWidth() {
     if (!activeLogo) return;
-    let {h, cx} = activeLogo;
+    let { h, cx } = activeLogo;
     let canvas = document.querySelector('.app__bg');
     let ctx = canvas.getContext('2d');
     ctx.textBaseline = 'top';
     ctx.font = `${h}px serif`;
-    let w =  ctx.measureText(activeLogo.text).width;
+    let w = ctx.measureText(activeLogo.text).width;
     activeLogo.w = w;
     activeLogo.x = cx - w / 2;
   }
@@ -279,11 +291,15 @@ const AppMain = props => {
     let dis2 = dis * dis;
     let bottom = 1 + (w * w) / (h * h);
     let height = Math.sqrt(dis2 / bottom);
-    let width = (height * w) / h;
-    activeLogo.x = cx - width;
     activeLogo.y = cy - height;
-    activeLogo.w = width * 2;
     activeLogo.h = height * 2;
+    if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
+      let width = (height * w) / h;
+      activeLogo.x = cx - width;
+      activeLogo.w = width * 2;
+    } else if (activeLogo.objectType === OBJECT_TYPE.TEXT) {
+      updateTextObjectWidth();
+    }
     draw();
   }
   function move(e) {

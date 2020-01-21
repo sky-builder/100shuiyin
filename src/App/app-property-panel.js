@@ -61,10 +61,32 @@ function PropertyPanel(props) {
   useEffect(() => {
     setIsDisabled(!activeLogo);
     setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
+    if (activeLogo && activeLogo.objectType === OBJECT_TYPE.TEXT) {
+      document.getElementById('js-text-input').value = activeLogo.text
+    }
   }, [activeLogo]);
 
+  function handleTextChange(e) {
+    if (!activeLogo) return;
+    let text = e.target.value;
+    let canvas=  document.querySelector(".app__bg");
+    let ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.textBaseline = 'top';
+    ctx.font= `${activeLogo.h}px serif`;
+    let w = ctx.measureText(text).width;
+    ctx.restore();
+    activeLogo.text = text;
+    activeLogo.w = w;
+    activeLogo.cx = activeLogo.x + activeLogo.w / 2;
+    props.setLogoList(props.logoList.slice());
+  }
   return (
     <div className="app__property-panel">
+      <div className="">
+        <label htmlFor="js-text-input" className="">text</label>
+        <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)}/>
+      </div>
       <div className="input-group">
         <label htmlFor="opacity-input">透明度</label>
         <div className="input-group__body">
