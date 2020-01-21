@@ -54,9 +54,13 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w } = logoList[i];
+        let { text, x, y, h, w, cx, cy } = logoList[i];
         ctx.textBaseline = 'top';
-        ctx.font = `${h}px serif`;
+        ctx.font = `${parseInt(h)}px serif`;
+        w = ctx.measureText(text).width;
+        logoList[i].x = cx - w / 2;
+        logoList[i].y = cy - h / 2;
+        logoList[i].w = w;
         ctx.fillText(text, x, y, w);
       }
       if (activeLogo === logoList[i]) {
@@ -284,6 +288,12 @@ const AppMain = props => {
     let w = ctx.measureText(activeLogo.text).width;
     activeLogo.w = w;
     activeLogo.x = cx - w / 2;
+    let index = logoList.findIndex(item => item.id === activeLogo.id);
+    if (index !== -1) {
+      let newLogo = Object.assign({}, activeLogo);
+      setActiveLogo(newLogo);
+      logoList.splice(index, 1, newLogo);
+    }
   }
   function horizontalResize(e) {
     let [x, y] = getPos(e);
