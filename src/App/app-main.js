@@ -20,17 +20,23 @@ const AppMain = props => {
     ctx => {
       if (!activeLogo) return;
       const anchorList = getAnchorList(activeLogo);
-      ctx.fillStyle = OUTLINE_STYLE.FILL;
+      ctx.save();
       ctx.strokeStyle = OUTLINE_STYLE.STROKE;
       ctx.strokeWidth = OUTLINE_STYLE.WIDTH;
       let { x, y, w, h } = activeLogo;
       ctx.strokeRect(x, y, w, h);
       anchorList.forEach(anchor => {
         let { x, y, w, h } = anchor;
+        if (activeAction === anchor.type) {
+          ctx.fillStyle = OUTLINE_STYLE.ACTIVE_FILL;
+        } else {
+          ctx.fillStyle = OUTLINE_STYLE.FILL;
+        }
         ctx.fillRect(x, y, w, h);
       });
+      ctx.restore();
     },
-    [activeLogo]
+    [activeLogo, activeAction]
   );
   const draw = useCallback(() => {
     let canvas = document.querySelector('.app__bg');
