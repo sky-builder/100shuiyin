@@ -72,6 +72,9 @@ export function exportCanvas(canvas, name, option = {
   let a = document.createElement('a');
   a.setAttribute('download', name);
   switch(option.format) {
+    case 'image/jpeg':
+      a.href = canvas.toDataURL('image/jpeg', option.quality);
+      break;
     default: {
       a.href = canvas.toDataURL('image/png');
       break;

@@ -1,0 +1,17 @@
+.modal .button {
+  width: 100%;
+}
+
+.modal-row {
+  display: flex;
+  flex-direction: row;
+}
+.modal-row + .modal-row {
+  margin-top: 10px;
+}
+
+.quality-input {
+  flex: 64px 0 0 ;
+  margin-left: 10px;
+}
+

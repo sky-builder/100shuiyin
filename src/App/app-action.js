@@ -37,7 +37,11 @@ const AppAction = props => {
     let obj = getTextObject();
     props.setLogoList(props.logoList.concat([obj]));
   }
-  function exportImage() {
+  function triggerModal() {
+    let modal = document.querySelector('.modal');
+    modal.classList.toggle('is-active');
+  }
+  function exportImage(option) {
     const { img } = bgImage;
     let canvas = document.querySelector('.app__bg');
     let ctx = canvas.getContext('2d');
@@ -69,11 +73,22 @@ const AppAction = props => {
         ctx.fillText(text, x, y, w);
         ctx.strokeStyle = strokeStyle;
         ctx.lineWidth = strokeWidth;
-        ctx.strokeText(text,x,y,w);
+        ctx.strokeText(text, x, y, w);
       }
       ctx.restore();
     }
-    exportCanvas(canvas, props.bgImage.name.split('.')[0]);
+    exportCanvas(canvas, props.bgImage.name.split('.')[0], option);
+  }
+  function exportPng() {
+    exportImage();
+  }
+  function exportJpg() {
+    let el = document.getElementById('js-export-jpg-button')
+    let value = +el.value;
+    exportImage({
+      format: 'image/jpeg',
+      quality: value
+    });
   }
   function getTextObject() {
     let cv = document.querySelector('.app__bg');
@@ -168,9 +183,27 @@ const AppAction = props => {
             />
           </label>
         </button>
-        <button className="app__export button is-success" onClick={exportImage}>
+        <button className="app__export button is-success" onClick={triggerModal}>
           export
         </button>
+        <div className="modal">
+          <div className="modal-background"></div>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">Export Image</p>
+              <button className="delete" onClick={triggerModal} aria-label="close"></button>
+            </header>
+            <section className="modal-card-body">
+              <div className="modal-row">
+                <button className="button is-success" onClick={exportPng}>PNG FORMAT</button>
+              </div>
+              <div className="modal-row">
+                <button className="button is-success" onClick={exportJpg}>JPG FORMAT</button>
+                <input className="quality-input input" id="js-export-jpg-button" type="number" defaultValue="1" step="0.1" min="0" max="1" placeholder="quality"  />
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
     );
   } else {
