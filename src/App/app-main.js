@@ -71,9 +71,11 @@ const AppMain = props => {
         ctx.fillRect(x, y, w, h);
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = strokeWidth;
-        ctx.strokeText(text,x,y,w);
+        if (strokeWidth >= 1) {
+          ctx.strokeStyle = strokeStyle;
+          ctx.lineWidth = strokeWidth;
+          ctx.strokeText(text,x,y,w);
+        }
       }
       if (activeLogo === logoList[i]) {
         drawOutline(ctx);
