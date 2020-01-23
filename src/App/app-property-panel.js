@@ -150,7 +150,7 @@ function PropertyPanel(props) {
       <h3>Stroke</h3>
       <div className="">
         <label htmlFor="js-font-stroke-width-input" className="">Width</label>
-        <input id="js-font-stroke-width-input" type="number" className="input" onChange={evt => handleStrokeWidthChange(evt)} />
+        <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
       </div>
       <div className="">
         <label htmlFor="js-font-stroke-color-input" className="">Color</label>
