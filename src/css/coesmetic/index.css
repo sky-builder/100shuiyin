@@ -3,3 +3,13 @@
   flex-direction: row;
   align-items: center;
 }
+
+.flex-75 { 
+  flex: 75% 1 1;
+}
+.flex-25 {
+  flex: 25% 1 1;
+}
+.ml-10 {
+  margin-left: 10px;
+}
