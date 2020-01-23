@@ -129,68 +129,116 @@ function PropertyPanel(props) {
       logoList.splice(index, 1, newLogo);
     }
   }
-  return (
-    <div className="app__property-panel">
-      <div className="">
-        <label htmlFor="js-text-input" className="">text</label>
-        <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)} />
-      </div>
-      <div className="">
-        <label htmlFor="js-font-size-input" className="">size</label>
-        <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)} />
-      </div>
-      <div className="">
-        <label htmlFor="js-font-color-input" className="">color</label>
-        <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
-      </div>
-      <div className="">
-        <label htmlFor="js-font-bg-color-input" className="">background color</label>
-        <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
-      </div>
-      <h3>Stroke</h3>
-      <div className="">
-        <label htmlFor="js-font-stroke-width-input" className="">Width</label>
-        <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
-      </div>
-      <div className="">
-        <label htmlFor="js-font-stroke-color-input" className="">Color</label>
-        <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
-      </div>
-      <div className="input-group">
-        <label htmlFor="opacity-input">透明度</label>
-        <div className="input-group__body">
-          <input
-            onChange={handleOpactiyChange}
-            value={opacity}
-            className="input-group__range"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
+  if (activeLogo) {
+    if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
+      return (
+        <div className="app__property-panel">
+
+          <div className="input-group">
+            <label htmlFor="opacity-input">透明度</label>
+            <div className="input-group__body">
+              <input
+                onChange={handleOpactiyChange}
+                value={opacity}
+                className="input-group__range"
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                disabled={isDisabled}
+              />
+              <input
+                onChange={handleOpactiyChange}
+                value={opacity}
+                id="opacity-input"
+                className="input-group__input input is-small"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                disabled={isDisabled}
+              />
+            </div>
+          </div>
+          <button
+            className="app__remove-logo button is-danger"
             disabled={isDisabled}
-          />
-          <input
-            onChange={handleOpactiyChange}
-            value={opacity}
-            id="opacity-input"
-            className="input-group__input input is-small"
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            disabled={isDisabled}
-          />
-        </div>
-      </div>
-      <button
-        className="app__remove-logo button is-danger"
-        disabled={isDisabled}
-        onClick={removeLogo}
-      >
-        remove logo
+            onClick={removeLogo}
+          >
+            remove logo
       </button>
-    </div>
-  );
+        </div>
+      )
+    } else {
+      return (
+        <div className="app__property-panel">
+          <div className="">
+            <label htmlFor="js-text-input" className="">text</label>
+            <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)} />
+          </div>
+          <div className="">
+            <label htmlFor="js-font-size-input" className="">size</label>
+            <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)} />
+          </div>
+          <div className="">
+            <label htmlFor="js-font-color-input" className="">color</label>
+            <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
+          </div>
+          <div className="">
+            <label htmlFor="js-font-bg-color-input" className="">background color</label>
+            <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
+          </div>
+          <h3>Stroke</h3>
+          <div className="">
+            <label htmlFor="js-font-stroke-width-input" className="">Width</label>
+            <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
+          </div>
+          <div className="">
+            <label htmlFor="js-font-stroke-color-input" className="">Color</label>
+            <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
+          </div>
+          <div className="input-group">
+            <label htmlFor="opacity-input">透明度</label>
+            <div className="input-group__body">
+              <input
+                onChange={handleOpactiyChange}
+                value={opacity}
+                className="input-group__range"
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                disabled={isDisabled}
+              />
+              <input
+                onChange={handleOpactiyChange}
+                value={opacity}
+                id="opacity-input"
+                className="input-group__input input is-small"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                disabled={isDisabled}
+              />
+            </div>
+          </div>
+          <button
+            className="app__remove-logo button is-danger"
+            disabled={isDisabled}
+            onClick={removeLogo}
+          >
+            remove logo
+        </button>
+        </div>
+      )
+    }
+  } else {
+    return (
+      <div className="app__property-panel">
+      </div>
+    )
+  }
 }
 
 export default PropertyPanel;
