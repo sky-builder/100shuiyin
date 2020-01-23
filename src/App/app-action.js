@@ -4,6 +4,7 @@ import { exportCanvas } from '../js/utility';
 
 const AppAction = props => {
   const { bgImage, logoList } = props;
+  const { name } = bgImage;
   function toWelcomeStage() {
     props.setPageStage(PAGE_STAGE.WELCOME);
     props.setLogoList([]);
@@ -46,7 +47,7 @@ const AppAction = props => {
     let canvas = document.querySelector('.app__bg');
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0); 
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
@@ -77,7 +78,9 @@ const AppAction = props => {
       }
       ctx.restore();
     }
-    exportCanvas(canvas, props.bgImage.name.split('.')[0], option);
+    let nameInput = document.getElementById('js-image-name-input');
+    let name = nameInput.value;
+    exportCanvas(canvas, name, option);
   }
   function exportPng() {
     exportImage();
@@ -195,11 +198,14 @@ const AppAction = props => {
             </header>
             <section className="modal-card-body">
               <div className="modal-row">
+                <input defaultValue={name.split('.')[0]} type="text" className="input" id="js-image-name-input" />
+              </div>
+              <div className="modal-row">
                 <button className="button is-success" onClick={exportPng}>PNG FORMAT</button>
               </div>
               <div className="modal-row">
                 <button className="button is-success" onClick={exportJpg}>JPG FORMAT</button>
-                <input className="quality-input input" id="js-export-jpg-button" type="number" defaultValue="1" step="0.1" min="0" max="1" placeholder="quality"  />
+                <input className="quality-input input" id="js-export-jpg-button" type="number" defaultValue="1" step="0.1" min="0" max="1" placeholder="quality" />
               </div>
             </section>
           </div>

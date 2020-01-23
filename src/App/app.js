@@ -7,10 +7,10 @@ import AppAction from './app-action';
 import AppBody from './app-body';
 
 function App() {
-  const [bgImage, setBgImage] = useState();
+  const [bgImage, setBgImage] = useState({});
   const [logoList, setLogoList] = useState([]);
   const [pageStage, setPageStage] = useState(PAGE_STAGE.WELCOME);
-  const [activeLogo, setActiveLogo] = useState(null);
+  const [activeLogo, setActiveLogo] = useState({});
   const [activeAction, setActiveAction] = useState(ACTION.NONE);
   const [logoId, setLogoId] = useState(1); 
 
