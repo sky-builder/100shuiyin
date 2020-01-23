@@ -53,6 +53,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 .app__remove-logo {
   margin-top: auto;
