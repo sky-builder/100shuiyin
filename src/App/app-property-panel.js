@@ -136,15 +136,15 @@ function PropertyPanel(props) {
         <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)} />
       </div>
       <div className="">
-        <label htmlFor="js-font-size-input" className="">font size</label>
+        <label htmlFor="js-font-size-input" className="">size</label>
         <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)} />
       </div>
       <div className="">
-        <label htmlFor="js-font-color-input" className="">font size</label>
+        <label htmlFor="js-font-color-input" className="">color</label>
         <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
       </div>
       <div className="">
-        <label htmlFor="js-font-bg-color-input" className="">font size</label>
+        <label htmlFor="js-font-bg-color-input" className="">background color</label>
         <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
       </div>
       <h3>Stroke</h3>
