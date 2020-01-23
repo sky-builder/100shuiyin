@@ -14,8 +14,8 @@ const AppMain = props => {
     setActiveAction
   } = props;
   const { img, name, scale, scaleType, actionType } = bgImage;
-  const ANCHOR_WIDTH = 10;
-  const ANCHOR_HEIGHT = 10;
+  const ANCHOR_WIDTH = 10 / scale;
+  const ANCHOR_HEIGHT = 10 / scale;
   const drawOutline = useCallback(
     ctx => {
       if (!activeLogo) return;
@@ -204,7 +204,7 @@ const AppMain = props => {
       },
       {
         x: centerX,
-        y: topY - 50,
+        y: topY - (50 / scale),
         type: ACTION.ROTATE
       }
     ];

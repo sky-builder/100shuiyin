@@ -4,7 +4,7 @@ import { exportCanvas } from '../js/utility';
 
 const AppAction = props => {
   const { bgImage, logoList } = props;
-  const { name } = bgImage;
+  const { name, scale } = bgImage;
   function toWelcomeStage() {
     props.setPageStage(PAGE_STAGE.WELCOME);
     props.setLogoList([]);
@@ -96,7 +96,7 @@ const AppAction = props => {
   function getTextObject() {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
-    let h = 16;
+    let h = 16 / scale;
     let font = `${h}px serif`;
     ctx.font = font;
     let text = 'hello,world';
@@ -124,6 +124,8 @@ const AppAction = props => {
   function getImageObject(img) {
     let nh = img.naturalHeight;
     let nw = img.naturalWidth;
+    nw /= scale;
+    nh /= scale;
     let obj = {
       x: 0,
       y: 0,
