@@ -13,6 +13,7 @@ function PropertyPanel(props) {
 
   const [opacity, setOpacity] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [hasShadow, setHasShadow] = useState(false);
 
   function handleOpactiyChange(e) {
     let value = e.target.value;
@@ -119,15 +120,39 @@ function PropertyPanel(props) {
       logoList.splice(index, 1, newLogo);
     }
   }
-  function handleStrokeColorChange(e) {
-    if (!activeLogo) return;
-    activeLogo.strokeStyle = e.target.value;
+  function updateActiveLogo() {
     let index = logoList.findIndex(item => item.id === activeLogo.id);
     if (index !== -1) {
       let newLogo = Object.assign({}, activeLogo);
       setActiveLogo(newLogo);
       logoList.splice(index, 1, newLogo);
     }
+  }
+  function handleStrokeColorChange(e) {
+    if (!activeLogo) return;
+    activeLogo.strokeStyle = e.target.value;
+    updateActiveLogo();
+  }
+  function toggleShadow(e) {
+    setHasShadow(e.target.checked);
+    activeLogo.hasShadow = e.target.checked;
+    updateActiveLogo();
+  }
+  function handleShadowColorChange(e) {
+    activeLogo.shadow.color = e.target.value;
+    updateActiveLogo();
+  }
+  function handleShadowBlurChange(e) {
+    activeLogo.shadow.blur = e.target.value;
+    updateActiveLogo();
+  }
+  function handleShadowXoffsetChange(e) {
+    activeLogo.shadow.xOffset = e.target.value;
+    updateActiveLogo();
+  }
+  function handleShadowYoffsetChange(e) {
+    activeLogo.shadow.yOffset = e.target.value;
+    updateActiveLogo();
   }
   if (activeLogo) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
@@ -197,6 +222,31 @@ function PropertyPanel(props) {
             <label htmlFor="js-font-stroke-color-input" className="">Color</label>
             <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
           </div>
+          <label class="checkbox">
+            <input type="checkbox" onChange={toggleShadow} />
+            &nbsp;shadow
+          </label>
+          {
+            hasShadow ? (<div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">color</label>
+                <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleShadowColorChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">blur</label>
+                <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" onChange={evt => handleShadowBlurChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">x offset</label>
+                <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" onChange={evt => handleShadowXoffsetChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">y offset</label>
+                <input id="js-font-stroke-color-input" type="number"  className="input" onChange={evt => handleShadowYoffsetChange(evt)} />
+              </div>
+            </div>) : null
+          }
+
           <div className="input-group">
             <label htmlFor="opacity-input">透明度</label>
             <div className="input-group__body">

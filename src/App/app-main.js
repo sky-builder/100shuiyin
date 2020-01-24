@@ -60,7 +60,7 @@ const AppMain = props => {
           logoList[i].h
         );
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, cx, cy, color, bgColor, strokeWidth, strokeStyle } = logoList[i];
+        let { text, x, y, h, w, cx, cy, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${parseInt(h)}px serif`;
         w = ctx.measureText(text).width;
@@ -69,12 +69,18 @@ const AppMain = props => {
         logoList[i].w = w;
         ctx.fillStyle = bgColor;
         ctx.fillRect(x, y, w, h);
+        if (hasShadow) {
+          ctx.shadowColor = shadow.color;
+          ctx.shadowBlur = shadow.blur;
+          ctx.shadowOffsetX = shadow.xOffset;
+          ctx.shadowOffsetY = shadow.yOffset;
+        }
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
         if (strokeWidth >= 1) {
           ctx.strokeStyle = strokeStyle;
           ctx.lineWidth = strokeWidth;
-          ctx.strokeText(text,x,y,w);
+          ctx.strokeText(text, x, y, w);
         }
       }
       if (activeLogo === logoList[i]) {

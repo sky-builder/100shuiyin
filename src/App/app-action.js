@@ -116,7 +116,14 @@ const AppAction = props => {
       color: '#000',
       bgColor: 'transparent',
       strokeStyle: '#000',
-      strokeWidth: 2
+      strokeWidth: 2,
+      hasShadow: false,
+      shadow: {
+        color: '#000000',
+        blur: 0,
+        xOffset: 0,
+        yOfffset: 0,
+      }
     };
     props.setLogoId(props.logoId + 1);
     return obj;
