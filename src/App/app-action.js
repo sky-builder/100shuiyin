@@ -44,7 +44,7 @@ const AppAction = props => {
   }
   function exportImage(option) {
     const { img } = bgImage;
-    let canvas = document.querySelector('.app__bg');
+    let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0); 

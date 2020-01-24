@@ -39,10 +39,9 @@ const AppMain = props => {
     [activeLogo, activeAction]
   );
   const draw = useCallback(() => {
-    let canvas = document.querySelector('.app__bg');
+    let canvas = document.querySelector('.app__canvas');
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
@@ -69,14 +68,19 @@ const AppMain = props => {
         logoList[i].w = w;
         ctx.fillStyle = bgColor;
         ctx.fillRect(x, y, w, h);
-        if (hasShadow) {
+        if (hasShadow && actionType === ACTION.NONE) {
+          ctx.save();
           ctx.shadowColor = shadow.color;
           ctx.shadowBlur = shadow.blur;
           ctx.shadowOffsetX = shadow.xOffset;
           ctx.shadowOffsetY = shadow.yOffset;
+          ctx.fillStyle = color;
+          ctx.fillText(text, x, y, w);
+          ctx.restore();
+        } else {
+          ctx.fillStyle = color;
+          ctx.fillText(text, x, y, w);
         }
-        ctx.fillStyle = color;
-        ctx.fillText(text, x, y, w);
         if (strokeWidth >= 1) {
           ctx.strokeStyle = strokeStyle;
           ctx.lineWidth = strokeWidth;
@@ -88,79 +92,96 @@ const AppMain = props => {
       }
       ctx.restore();
     }
-  }, [activeLogo, drawOutline, img, logoList]);
+  }, [activeLogo, drawOutline, img, logoList, actionType]);
   useEffect(() => {
-    function handleWindowResize() {
-      let nw = img.naturalWidth;
-      let nh = img.naturalHeight;
-      let canvas = document.querySelector('.app__bg');
-      let appBody = document.querySelector('.app__main');
-      let bw = appBody.getBoundingClientRect().width;
-      let bh = appBody.getBoundingClientRect().height;
-      let s1 = bw / nw;
-      let s2 = bh / nh;
-      let newScale;
-      if (scaleType === SCALE_TYPE.FIT_HEIGHT) {
-        newScale = s2;
-      } else if (scaleType === SCALE_TYPE.FIT_WIDTH) {
-        newScale = s1;
-      } else if (scaleType === SCALE_TYPE.NATURAL) {
-        newScale = 1;
-      }
-      setBgImage({
-        img: img,
-        name: name,
-        scale: newScale,
-        scaleType: scaleType,
-        actionType: actionType
-      });
-      let cursor = 'default';
-      switch (actionType) {
-        case ACTION.MOVE: {
-          cursor = 'move';
-          break;
-        }
-        case ACTION.TOP_LEFT_RESIZE:
-        case ACTION.BOTTOM_RIGHT_RESIZE: {
-          cursor = 'se-resize';
-          break;
-        }
-        case ACTION.TOP_RIGHT_RESIZE:
-        case ACTION.BOTTOM_LEFT_RESIZE: {
-          cursor = 'sw-resize';
-          break;
-        }
-        case ACTION.CENTER_LEFT_RESIZE:
-        case ACTION.CENTER_RIGHT_RESIZE: {
-          cursor = 'e-resize';
-          break;
-        }
-        case ACTION.TOP_CENTER_RESIZE:
-        case ACTION.BOTTOM_CENTER_RESIZE: {
-          cursor = 's-resize';
-          break;
-        }
-        case ACTION.ROTATE: {
-          cursor = 'crosshair'
-          break;
-        }
-      }
-      canvas.style.cursor = cursor;
-      canvas.width = nw;
-      canvas.height = nh;
-      canvas.style.width = nw * newScale + 'px';
-      canvas.style.height = nh * newScale + 'px';
-      let newWidth = nw * newScale;
-      let newHeight = nh * newScale;
-      let tx = bw > newWidth ? (bw - newWidth) / 2 : 0;
-      let ty = bh > newHeight ? (bh - newHeight) / 2 : 0;
-      canvas.style.transform = `translate(${tx}px, ${ty}px)`
-      draw();
+    draw();
+  }, [activeLogo, img, logoList, actionType])
+  const handleWindowResize = useCallback(() => {
+    let nw = img.naturalWidth;
+    let nh = img.naturalHeight;
+    let bgCanvas = document.querySelector('.app__bg');
+    let canvas = document.querySelector('.app__canvas');
+    let appBody = document.querySelector('.app__main');
+    let bw = appBody.getBoundingClientRect().width;
+    let bh = appBody.getBoundingClientRect().height;
+    let s1 = bw / nw;
+    let s2 = bh / nh;
+    let newScale;
+    if (scaleType === SCALE_TYPE.FIT_HEIGHT) {
+      newScale = s2;
+    } else if (scaleType === SCALE_TYPE.FIT_WIDTH) {
+      newScale = s1;
+    } else if (scaleType === SCALE_TYPE.NATURAL) {
+      newScale = 1;
     }
-    handleWindowResize();
+    setBgImage({
+      img: img,
+      name: name,
+      scale: newScale,
+      scaleType: scaleType,
+      actionType: actionType
+    });
+    canvas.width = nw;
+    canvas.height = nh;
+    canvas.style.width = nw * newScale + 'px';
+    canvas.style.height = nh * newScale + 'px';
+    bgCanvas.width = nw;
+    bgCanvas.height = nh;
+    bgCanvas.style.width = nw * newScale + 'px';
+    bgCanvas.style.height = nh * newScale + 'px';
+    let newWidth = nw * newScale;
+    let newHeight = nh * newScale;
+    let tx = bw > newWidth ? (bw - newWidth) / 2 : 0;
+    let ty = bh > newHeight ? (bh - newHeight) / 2 : 0;
+    canvas.style.transform = `translate(${tx}px, ${ty}px)`
+    bgCanvas.style.transform = `translate(${tx}px, ${ty}px)`
+    let ctx = bgCanvas.getContext('2d')
+    ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+    draw();
+  })
+  useEffect(() => {
+    let canvas = document.querySelector('.app__canvas');
+    let cursor = 'default';
+    switch (actionType) {
+      case ACTION.MOVE: {
+        cursor = 'move';
+        break;
+      }
+      case ACTION.TOP_LEFT_RESIZE:
+      case ACTION.BOTTOM_RIGHT_RESIZE: {
+        cursor = 'se-resize';
+        break;
+      }
+      case ACTION.TOP_RIGHT_RESIZE:
+      case ACTION.BOTTOM_LEFT_RESIZE: {
+        cursor = 'sw-resize';
+        break;
+      }
+      case ACTION.CENTER_LEFT_RESIZE:
+      case ACTION.CENTER_RIGHT_RESIZE: {
+        cursor = 'e-resize';
+        break;
+      }
+      case ACTION.TOP_CENTER_RESIZE:
+      case ACTION.BOTTOM_CENTER_RESIZE: {
+        cursor = 's-resize';
+        break;
+      }
+      case ACTION.ROTATE: {
+        cursor = 'crosshair'
+        break;
+      }
+    }
+    canvas.style.cursor = cursor;
     window.addEventListener('resize', handleWindowResize);
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, [img, name, setBgImage, logoList, draw, scaleType, actionType]);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  }, [actionType]);
+  useEffect(() => {
+    handleWindowResize();
+  }, [img, scaleType])
   function getAnchorList(rect) {
     let { x, y, w, h } = rect;
     let leftX = x - ANCHOR_WIDTH / 2;
@@ -249,7 +270,7 @@ const AppMain = props => {
     return ACTION.NONE;
   }
   function getPos(e) {
-    let canvas = document.querySelector('.app__bg');
+    let canvas = document.querySelector('.app__canvas');
     let x = (e.pageX - canvas.getBoundingClientRect().x) / scale;
     let y =
       (e.pageY -
@@ -336,7 +357,7 @@ const AppMain = props => {
   function updateTextObjectWidth() {
     if (!activeLogo) return;
     let { h, cx } = activeLogo;
-    let canvas = document.querySelector('.app__bg');
+    let canvas = document.querySelector('.app__canvas');
     let ctx = canvas.getContext('2d');
     ctx.textBaseline = 'top';
     ctx.font = `${h}px serif`;
@@ -444,10 +465,15 @@ const AppMain = props => {
   return (
     <div className="app__main">
       <canvas
+        className="app__bg"
+        width="0"
+        height="0"
+      ></canvas>
+      <canvas
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className="app__bg"
+        className="app__canvas"
         width="0"
         height="0"
       ></canvas>
