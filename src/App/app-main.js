@@ -89,8 +89,8 @@ const AppMain = props => {
       let nh = img.naturalHeight;
       let canvas = document.querySelector('.app__bg');
       let appBody = document.querySelector('.app__main');
-      let bw = appBody.clientWidth;
-      let bh = appBody.clientHeight;
+      let bw = appBody.getBoundingClientRect().width;
+      let bh = appBody.getBoundingClientRect().height;
       let s1 = bw / nw;
       let s2 = bh / nh;
       let newScale;
