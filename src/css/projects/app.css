@@ -17,6 +17,14 @@
   display: flex;
   flex-direction: column;
 }
+
+.app__property-group-title {
+  margin: 10px 0;
+}
+.app__property + .app__property {
+  margin-top: 10px;
+}
+
 .app__property select {
   width: 100%;
 }

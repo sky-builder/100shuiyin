@@ -120,9 +120,9 @@ const AppAction = props => {
       hasShadow: false,
       shadow: {
         color: '#000000',
-        blur: 0,
-        xOffset: 0,
-        yOfffset: 0,
+        blur: 10,
+        xOffset: 5,
+        yOfffset: 5,
       },
       fontFamily: 'serif'
     };
@@ -149,9 +149,9 @@ const AppAction = props => {
       hasShadow: false,
       shadow: {
         color: "#000000",
-        blur: 0,
-        xOffset: 0,
-        yOffset: 0
+        blur: 10,
+        xOffset: 5,
+        yOffset: 5
       }
     };
     props.setLogoId(props.logoId + 1);
