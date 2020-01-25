@@ -76,11 +76,12 @@ const AppMain = props => {
           );
         }
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, cx, cy, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
+        let { text, y, h, cx, cy, fontFamily, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
         ctx.textBaseline = 'top';
-        ctx.font = `${parseInt(h)}px serif`;
-        w = ctx.measureText(text).width;
-        logoList[i].x = cx - w / 2;
+        ctx.font = `${parseInt(h)}px ${fontFamily}`;
+        const w = ctx.measureText(text).width;
+        const x = cx - w / 2;
+        logoList[i].x = x;
         logoList[i].y = cy - h / 2;
         logoList[i].w = w;
         ctx.fillStyle = bgColor;
@@ -373,11 +374,11 @@ const AppMain = props => {
   }
   function updateTextObjectWidth() {
     if (!activeLogo) return;
-    let { h, cx } = activeLogo;
+    let { h, cx, fontFamily } = activeLogo;
     let canvas = document.querySelector('.app__canvas');
     let ctx = canvas.getContext('2d');
     ctx.textBaseline = 'top';
-    ctx.font = `${h}px serif`;
+    ctx.font = `${parseInt(h)}px ${fontFamily}`;
     let w = ctx.measureText(activeLogo.text).width;
     activeLogo.w = w;
     activeLogo.x = cx - w / 2;

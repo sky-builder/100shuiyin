@@ -123,7 +123,8 @@ const AppAction = props => {
         blur: 0,
         xOffset: 0,
         yOfffset: 0,
-      }
+      },
+      fontFamily: 'serif'
     };
     props.setLogoId(props.logoId + 1);
     return obj;

@@ -88,7 +88,7 @@ function PropertyPanel(props) {
     let value = +e.target.value;
     activeLogo.h = value;
     activeLogo.y = activeLogo.cy - value / 2;
-    props.setLogoList(props.logoList.slice());
+    updateActiveLogo();
   }
   function handleColorChange(e) {
     if (!activeLogo) return;
@@ -153,6 +153,32 @@ function PropertyPanel(props) {
     activeLogo.shadow.yOffset = e.target.value;
     updateActiveLogo();
   }
+  function handleFontChange(e) {
+    activeLogo.fontFamily = e.target.value;
+    updateActiveLogo();
+  }
+  const fontList = [
+    {
+      label: 'serif',
+      value: 'serif',
+    },
+    {
+      label: 'Zhi Mang Xing',
+      value: 'Zhi Mang Xing, cursive',
+    }, {
+      label: 'Ma Shan Zheng',
+      value: 'Ma Shan Zheng, cursive',
+    }, {
+      label: 'ZCOOL KuaiLe',
+      value: 'ZCOOL KuaiLe, cursive'
+    }, {
+      label: 'ZCOOL QingKe HuangYou',
+      value: 'ZCOOL QingKe HuangYou, cursive',
+    }, {
+      label: 'Noto Sans SC',
+      value: 'Noto Sans SC, sans-serif'
+    }
+  ]
   if (activeLogo) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       return (
@@ -220,13 +246,25 @@ function PropertyPanel(props) {
     } else {
       return (
         <div className="app__property-panel">
+          <div className="app__property">
+            <label htmlFor="js-text-input" className="">字体</label>
+            <div class="select">
+              <select onChange={handleFontChange}>
+                {
+                  fontList.map(font => {
+                    return <option style={{fontFamily: `${font.value}`}} value={font.value}>{font.label}</option>
+                  })
+                }
+              </select>
+            </div>
+          </div>
           <div className="">
             <label htmlFor="js-text-input" className="">text</label>
             <input id="js-text-input" type="text" className="input" onChange={evt => handleTextChange(evt)} />
           </div>
           <div className="">
             <label htmlFor="js-font-size-input" className="">size</label>
-            <input id="js-font-size-input" type="number" min="0" step="0.5" className="input" onChange={evt => handleFontSizeChange(evt)} />
+            <input id="js-font-size-input" type="number" min="0" step="1" className="input" onChange={evt => handleFontSizeChange(evt)} />
           </div>
           <div className="">
             <label htmlFor="js-font-color-input" className="">color</label>

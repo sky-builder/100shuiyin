@@ -13,6 +13,14 @@
   border-bottom: 1px solid #eee;
 }
 
+.app__property {
+  display: flex;
+  flex-direction: column;
+}
+.app__property select {
+  width: 100%;
+}
+
 .app__bg, .app__canvas {
   position: absolute;
 }
