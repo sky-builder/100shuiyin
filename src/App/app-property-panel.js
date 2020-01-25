@@ -13,7 +13,7 @@ function PropertyPanel(props) {
 
   const [opacity, setOpacity] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [hasShadow, setHasShadow] = useState(false);
+  const hasShadow = activeLogo && activeLogo.hasShadow;
 
   function handleOpactiyChange(e) {
     let value = e.target.value;
@@ -134,7 +134,6 @@ function PropertyPanel(props) {
     updateActiveLogo();
   }
   function toggleShadow(e) {
-    setHasShadow(e.target.checked);
     activeLogo.hasShadow = e.target.checked;
     updateActiveLogo();
   }
@@ -185,6 +184,30 @@ function PropertyPanel(props) {
               />
             </div>
           </div>
+          <label class="checkbox">
+            <input type="checkbox" onChange={toggleShadow} />
+            &nbsp;shadow
+          </label>
+          {
+            hasShadow ? (<div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">color</label>
+                <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleShadowColorChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">blur</label>
+                <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" onChange={evt => handleShadowBlurChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">x offset</label>
+                <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" onChange={evt => handleShadowXoffsetChange(evt)} />
+              </div>
+              <div className="">
+                <label htmlFor="js-font-stroke-color-input" className="">y offset</label>
+                <input id="js-font-stroke-color-input" type="number" className="input" onChange={evt => handleShadowYoffsetChange(evt)} />
+              </div>
+            </div>) : null
+          }
           <button
             className="app__remove-logo button is-danger"
             disabled={isDisabled}
@@ -242,7 +265,7 @@ function PropertyPanel(props) {
               </div>
               <div className="">
                 <label htmlFor="js-font-stroke-color-input" className="">y offset</label>
-                <input id="js-font-stroke-color-input" type="number"  className="input" onChange={evt => handleShadowYoffsetChange(evt)} />
+                <input id="js-font-stroke-color-input" type="number" className="input" onChange={evt => handleShadowYoffsetChange(evt)} />
               </div>
             </div>) : null
           }

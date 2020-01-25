@@ -144,7 +144,14 @@ const AppAction = props => {
       objectType: OBJECT_TYPE.IMAGE,
       cx: nw / 2,
       cy: nh / 2,
-      id: props.logoId
+      id: props.logoId,
+      hasShadow: false,
+      shadow: {
+        color: "#000000",
+        blur: 0,
+        xOffset: 0,
+        yOffset: 0
+      }
     };
     props.setLogoId(props.logoId + 1);
     return obj;

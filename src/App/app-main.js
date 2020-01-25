@@ -51,13 +51,30 @@ const AppMain = props => {
       ctx.rotate((logoList[i].angle * Math.PI) / 180);
       ctx.translate(-cx, -cy);
       if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
-        ctx.drawImage(
-          logoList[i].img,
-          logoList[i].x,
-          logoList[i].y,
-          logoList[i].w,
-          logoList[i].h
-        );
+        let { hasShadow, shadow } = logoList[i];
+        if (hasShadow && actionType === ACTION.NONE) {
+          ctx.save();
+          ctx.shadowColor = shadow.color;
+          ctx.shadowBlur = shadow.blur;
+          ctx.shadowOffsetX = shadow.xOffset;
+          ctx.shadowOffsetY = shadow.yOffset;
+          ctx.drawImage(
+            logoList[i].img,
+            logoList[i].x,
+            logoList[i].y,
+            logoList[i].w,
+            logoList[i].h
+          );
+          ctx.restore();
+        } else {
+          ctx.drawImage(
+            logoList[i].img,
+            logoList[i].x,
+            logoList[i].y,
+            logoList[i].w,
+            logoList[i].h
+          );
+        }
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
         let { text, x, y, h, w, cx, cy, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
         ctx.textBaseline = 'top';
