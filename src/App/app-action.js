@@ -23,9 +23,6 @@ const AppAction = props => {
       img.src = url;
       img.addEventListener('load', () => {
         addLogo(img);
-        let canvas = document.querySelector('.app__bg');
-        let ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
       });
     });
     reader.readAsDataURL(file);
