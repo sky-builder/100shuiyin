@@ -1,3 +1,5 @@
+import { ACTION, OBJECT_TYPE } from './enum';
+
 function getPoint(x, y, cx, cy, angle) {
   let diffX = cx - x;
   let diffY = cy - y;
@@ -54,7 +56,7 @@ export function isInsideRect(p, cx, cy, rect, angle) {
   // console.log(rectArea, calcArea);
   // console.log(p, cx, cy, rect, angle);
   // console.log(p1,p2,p3,p4);
-  
+
   let diff = Math.abs(calcArea - rectArea);
   let precision = 1e-6;
   return diff < precision;
@@ -71,7 +73,7 @@ export function exportCanvas(canvas, name, option = {
   }
   let a = document.createElement('a');
   a.setAttribute('download', name);
-  switch(option.format) {
+  switch (option.format) {
     case 'image/jpeg':
       a.href = canvas.toDataURL('image/jpeg', option.quality);
       break;
@@ -117,4 +119,72 @@ export function getRad(p1, p2) {
 }
 export function rad2deg(rad) {
   return rad * 180 / Math.PI;
-} 
+}
+
+export function drawLogoList(ctx, logoList, actionType) {
+  for (let i = 0; i < logoList.length; i += 1) {
+    ctx.save();
+    ctx.globalAlpha = logoList[i].opacity || 1;
+    let cx = logoList[i].x + logoList[i].w / 2;
+    let cy = logoList[i].y + logoList[i].h / 2;
+    ctx.translate(cx, cy);
+    ctx.rotate((logoList[i].angle * Math.PI) / 180);
+    ctx.translate(-cx, -cy);
+    if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
+      let { hasShadow, shadow } = logoList[i];
+      if (hasShadow && actionType === ACTION.NONE) {
+        ctx.save();
+        ctx.shadowColor = shadow.color;
+        ctx.shadowBlur = shadow.blur;
+        ctx.shadowOffsetX = shadow.xOffset;
+        ctx.shadowOffsetY = shadow.yOffset;
+        ctx.drawImage(
+          logoList[i].img,
+          logoList[i].x,
+          logoList[i].y,
+          logoList[i].w,
+          logoList[i].h
+        );
+        ctx.restore();
+      } else {
+        ctx.drawImage(
+          logoList[i].img,
+          logoList[i].x,
+          logoList[i].y,
+          logoList[i].w,
+          logoList[i].h
+        );
+      }
+    } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
+      let { text, y, h, cx, cy, fontFamily, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
+      ctx.textBaseline = 'top';
+      ctx.font = `${parseInt(h)}px ${fontFamily}`;
+      const w = ctx.measureText(text).width;
+      const x = cx - w / 2;
+      logoList[i].x = x;
+      logoList[i].y = cy - h / 2;
+      logoList[i].w = w;
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(x, y, w, h);
+      if (hasShadow && actionType === ACTION.NONE) {
+        ctx.save();
+        ctx.shadowColor = shadow.color;
+        ctx.shadowBlur = shadow.blur;
+        ctx.shadowOffsetX = shadow.xOffset;
+        ctx.shadowOffsetY = shadow.yOffset;
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y, w);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y, w);
+      }
+      if (strokeWidth >= 1) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeText(text, x, y, w);
+      }
+    }
+    ctx.restore();
+  }
+}

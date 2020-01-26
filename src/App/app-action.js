@@ -1,6 +1,6 @@
 import React from 'react';
 import { PAGE_STAGE, ACTION, OBJECT_TYPE, SCALE_TYPE } from '../js/enum';
-import { exportCanvas } from '../js/utility';
+import { exportCanvas, drawLogoList } from '../js/utility';
 
 const AppAction = props => {
   const { bgImage, logoList } = props;
@@ -48,64 +48,7 @@ const AppAction = props => {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0); 
-    for (let i = 0; i < logoList.length; i += 1) {
-      ctx.save();
-      ctx.globalAlpha = logoList[i].opacity || 1;
-      let {cx, cy, hasShadow, shadow} = logoList[i];
-      ctx.translate(cx, cy);
-      ctx.rotate((logoList[i].angle * Math.PI) / 180);
-      ctx.translate(-cx, -cy);
-      if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
-        if (hasShadow) {
-          ctx.save();
-          ctx.shadowColor = shadow.color;
-          ctx.shadowBlur = shadow.blur;
-          ctx.shadowOffsetX = shadow.xOffset;
-          ctx.shadowOffsetY = shadow.yOffset;
-          ctx.drawImage(
-            logoList[i].img,
-            logoList[i].x,
-            logoList[i].y,
-            logoList[i].w,
-            logoList[i].h
-          );
-          ctx.restore();
-        } else {
-          ctx.drawImage(
-            logoList[i].img,
-            logoList[i].x,
-            logoList[i].y,
-            logoList[i].w,
-            logoList[i].h
-          );
-        }
-      } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, y, h, color, bgColor, strokeStyle, strokeWidth, fontFamily } = logoList[i];
-        ctx.textBaseline = 'top';
-        ctx.font = `${parseInt(h)}px ${fontFamily}`;
-        const w = ctx.measureText(text).width;
-        const x = cx - w / 2;
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(x, y, w, h);
-        if (hasShadow) {
-          ctx.save();
-          ctx.shadowColor = shadow.color;
-          ctx.shadowBlur = shadow.blur;
-          ctx.shadowOffsetX = shadow.xOffset;
-          ctx.shadowOffsetY = shadow.yOffset;
-          ctx.fillStyle = color;
-          ctx.fillText(text, x, y, w);
-          ctx.restore();
-        } else {
-          ctx.fillStyle = color;
-          ctx.fillText(text, x, y, w);
-        }
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = strokeWidth;
-        ctx.strokeText(text, x, y, w);
-      }
-      ctx.restore();
-    }
+    drawLogoList(ctx, logoList, ACTION.NONE);
     let nameInput = document.getElementById('js-image-name-input');
     let name = nameInput.value;
     exportCanvas(canvas, name, option);
