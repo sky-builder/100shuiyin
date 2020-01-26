@@ -51,21 +51,36 @@ const AppAction = props => {
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
       ctx.globalAlpha = logoList[i].opacity || 1;
-      let cx = logoList[i].x + logoList[i].w / 2;
-      let cy = logoList[i].y + logoList[i].h / 2;
+      let {cx, cy, hasShadow, shadow} = logoList[i];
       ctx.translate(cx, cy);
       ctx.rotate((logoList[i].angle * Math.PI) / 180);
       ctx.translate(-cx, -cy);
       if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
-        ctx.drawImage(
-          logoList[i].img,
-          logoList[i].x,
-          logoList[i].y,
-          logoList[i].w,
-          logoList[i].h
-        );
+        if (hasShadow) {
+          ctx.save();
+          ctx.shadowColor = shadow.color;
+          ctx.shadowBlur = shadow.blur;
+          ctx.shadowOffsetX = shadow.xOffset;
+          ctx.shadowOffsetY = shadow.yOffset;
+          ctx.drawImage(
+            logoList[i].img,
+            logoList[i].x,
+            logoList[i].y,
+            logoList[i].w,
+            logoList[i].h
+          );
+          ctx.restore();
+        } else {
+          ctx.drawImage(
+            logoList[i].img,
+            logoList[i].x,
+            logoList[i].y,
+            logoList[i].w,
+            logoList[i].h
+          );
+        }
       } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, y, h, color, bgColor, strokeStyle, strokeWidth, fontFamily, hasShadow, shadow } = logoList[i];
+        let { text, y, h, color, bgColor, strokeStyle, strokeWidth, fontFamily } = logoList[i];
         ctx.textBaseline = 'top';
         ctx.font = `${parseInt(h)}px ${fontFamily}`;
         const w = ctx.measureText(text).width;
