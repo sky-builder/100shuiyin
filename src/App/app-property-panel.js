@@ -132,8 +132,8 @@ function PropertyPanel(props) {
   }
   const fontList = [
     {
-      label: 'serif',
-      value: 'serif',
+      label: 'Times New Roman',
+      value: 'Times New Roman',
     },
     {
       label: 'Zhi Mang Xing',

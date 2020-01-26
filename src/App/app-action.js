@@ -46,7 +46,6 @@ const AppAction = props => {
     canvas.width = bg.width;
     canvas.height = bg.height;
     let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0); 
     drawLogoList(ctx, logoList, ACTION.NONE);
     let nameInput = document.getElementById('js-image-name-input');
@@ -68,7 +67,7 @@ const AppAction = props => {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
     let h = 16 / scale;
-    let font = `${h}px serif`;
+    let font = `${parseInt(h)}px Times New Roman`;
     ctx.font = font;
     let text = 'hello,world';
     let w = ctx.measureText(text).width;
@@ -95,7 +94,7 @@ const AppAction = props => {
         xOffset: 5,
         yOfffset: 5,
       },
-      fontFamily: 'serif'
+      fontFamily: 'Times New Roman'
     };
     props.setLogoId(props.logoId + 1);
     return obj;
