@@ -75,13 +75,13 @@ function PropertyPanel(props) {
     let ctx = canvas.getContext('2d');
     ctx.save();
     ctx.textBaseline = 'top';
-    ctx.font = `${activeLogo.h}px serif`;
+    ctx.font = `${parseInt(activeLogo.h)}px ${activeLogo.fontFamily}`;
     let w = ctx.measureText(text).width;
     ctx.restore();
     activeLogo.text = text;
     activeLogo.w = w;
     activeLogo.cx = activeLogo.x + activeLogo.w / 2;
-    props.setLogoList(props.logoList.slice());
+    updateActiveLogo();
   }
   function handleFontSizeChange(e) {
     if (!activeLogo) return;
