@@ -35,6 +35,8 @@ const AppWelcome = props => {
     let s1 = bw / img.naturalWidth;
     let s2 = bh / img.naturalHeight;
     let scale = Math.min(s1, s2);
+    // i dont't think scale here is useful
+    // i think it will be re-calulated in other place with scale type
     if (scale > 1) scale = 1;
     props.setBgImage({
       img,
@@ -52,7 +54,7 @@ const AppWelcome = props => {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <label htmlFor="upload-bg-image">选择背景图片</label>
+      <label htmlFor="upload-bg-image">选择图片</label>
       <input id="upload-bg-image" type="file" onChange={handleBgChange} />
     </div>
   );

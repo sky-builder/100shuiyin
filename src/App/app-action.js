@@ -50,24 +50,23 @@ const AppAction = props => {
     ctx.drawImage(img, 0, 0); 
     for (let i = 0; i < logoList.length; i += 1) {
       ctx.save();
-      ctx.globalAlpha = logoList[i].opacity || 1;
-      let cx = logoList[i].x + logoList[i].w / 2;
-      let cy = logoList[i].y + logoList[i].h / 2;
+      let {x, y, w, h, img, cx, cy, angle, opacity, objectType} = logoList[i];
+      ctx.globalAlpha = opacity || 1;
       ctx.translate(cx, cy);
-      ctx.rotate((logoList[i].angle * Math.PI) / 180);
+      ctx.rotate((angle * Math.PI) / 180);
       ctx.translate(-cx, -cy);
-      if (logoList[i].objectType === OBJECT_TYPE.IMAGE) {
+      if (objectType === OBJECT_TYPE.IMAGE) {
         ctx.drawImage(
-          logoList[i].img,
-          logoList[i].x,
-          logoList[i].y,
-          logoList[i].w,
-          logoList[i].h
+          img,
+          x,
+          y,
+          w,
+          h
         );
-      } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-        let { text, x, y, h, w, color, bgColor, strokeStyle, strokeWidth } = logoList[i];
+      } else if (objectType === OBJECT_TYPE.TEXT) {
+        let { text, color, bgColor, strokeStyle, strokeWidth, fontFamily } = logoList[i];
         ctx.textBaseline = 'top';
-        ctx.font = `${h}px serif`;
+        ctx.font = `${parseInt(h)}px ${fontFamily}`;
         ctx.fillStyle = bgColor;
         ctx.fillRect(x, y, w, h);
         ctx.fillStyle = color;
@@ -167,7 +166,7 @@ const AppAction = props => {
     return (
       <div className="app__action">
         <button
-          className="app__fit-height button"
+          className="app__fit-width button"
           onClick={() => changeScaleType(SCALE_TYPE.FIT_HEIGHT)}
         >
           fit height
@@ -179,7 +178,7 @@ const AppAction = props => {
           fit width
         </button>
         <button
-          className="app__fit-height button"
+          className="app__natural-size button"
           onClick={() => changeScaleType(SCALE_TYPE.NATURAL)}
         >
           natural
