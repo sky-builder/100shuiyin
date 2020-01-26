@@ -19,34 +19,7 @@ function PropertyPanel(props) {
     let value = e.target.value;
     activeLogo.opacity = value / 100;
     setOpacity(value);
-    let canvas = document.querySelector('.app__bg');
-    let ctx = canvas.getContext('2d');
-    ctx.drawImage(bgImage.img, 0, 0);
-    for (let i = 0; i < logoList.length; i += 1) {
-      ctx.save();
-      ctx.globalAlpha = logoList[i].opacity || 1;
-      switch (logoList[i].objectType) {
-        case OBJECT_TYPE.TEXT:
-          let { text, x, y, h } = logoList[i];
-          let font = `${h}px serif`;
-          ctx.textBaseline = 'top';
-          ctx.font = font;
-          ctx.fillText(text, x, y);
-          break;
-        case OBJECT_TYPE.IMAGE:
-          ctx.drawImage(
-            logoList[i].img,
-            logoList[i].x,
-            logoList[i].y,
-            logoList[i].w,
-            logoList[i].h
-          );
-          break;
-        default:
-          break;
-      }
-      ctx.restore();
-    }
+    updateActiveLogo();
   }
   function removeLogo() {
     if (!activeLogo) return;
