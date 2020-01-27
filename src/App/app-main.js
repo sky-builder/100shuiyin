@@ -45,7 +45,13 @@ const AppMain = props => {
     drawLogoList(ctx, logoList, actionType);
     for(let logo of logoList) {
       if (logo === activeLogo) {
+        ctx.save();
+        let {cx, cy, angle} = activeLogo;
+        ctx.translate(cx, cy);
+        ctx.rotate((angle * Math.PI) / 180);
+        ctx.translate(-cx, -cy);
         drawOutline(ctx);
+        ctx.restore();
       }
     }
   }, [activeLogo, drawOutline, img, logoList, actionType]);
