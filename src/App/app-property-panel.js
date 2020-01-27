@@ -160,27 +160,31 @@ function PropertyPanel(props) {
             <div className="input-group">
               <label htmlFor="opacity-input">透明度</label>
               <div className="input-group__body">
-                <input
-                  onChange={handleOpactiyChange}
-                  value={opacity}
-                  className="input-group__range"
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="1"
-                  disabled={isDisabled}
-                />
-                <input
-                  onChange={handleOpactiyChange}
-                  value={opacity}
-                  id="opacity-input"
-                  className="input-group__input input is-small"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="1"
-                  disabled={isDisabled}
-                />
+                <div className="row flex-75">
+                  <input
+                    onChange={handleOpactiyChange}
+                    value={opacity}
+                    className="input-group__range"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    disabled={isDisabled}
+                  />
+                </div>
+                <div className="row flex-25 ml-10">
+                  <input
+                    onChange={handleOpactiyChange}
+                    value={opacity}
+                    id="opacity-input"
+                    className="input is-small"
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="1"
+                    disabled={isDisabled}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -273,7 +277,7 @@ function PropertyPanel(props) {
                     onChange={handleOpactiyChange}
                     value={opacity}
                     id="opacity-input"
-                    className="input-group__input input is-small"
+                    className="input is-small"
                     type="number"
                     min="0"
                     max="100"
