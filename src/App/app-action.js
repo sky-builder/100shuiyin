@@ -140,32 +140,32 @@ const AppAction = props => {
           className="app__fit-height button"
           onClick={() => changeScaleType(SCALE_TYPE.FIT_HEIGHT)}
         >
-          fit height
+          适配高度
         </button>
         <button
           className="app__fit-height button"
           onClick={() => changeScaleType(SCALE_TYPE.FIT_WIDTH)}
         >
-          fit width
+          适配宽度
         </button>
         <button
           className="app__fit-height button"
           onClick={() => changeScaleType(SCALE_TYPE.NATURAL)}
         >
-          natural
+          原始大小
         </button>
         <button
           className="app__delete button is-danger"
           onClick={toWelcomeStage}
         >
-          delete
+          删除
         </button>
         <button className="app__add-text button is-info" onClick={addText}>
-          add text
+          添加文本水印
         </button>
         <button className="app__upload button is-info ">
           <label className="app__logo-input-label">
-            upload logo
+            添加图片水印
             <input
               className="app__logo-input"
               type="file"
@@ -174,13 +174,13 @@ const AppAction = props => {
           </label>
         </button>
         <button className="app__export button is-success" onClick={triggerModal}>
-          export
+          下载
         </button>
         <div className="modal">
           <div className="modal-background"></div>
           <div className="modal-card">
             <header className="modal-card-head">
-              <p className="modal-card-title">Export Image</p>
+              <p className="modal-card-title">下载图片</p>
               <button className="delete" onClick={triggerModal} aria-label="close"></button>
             </header>
             <section className="modal-card-body">

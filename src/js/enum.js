@@ -23,9 +23,9 @@ export const OBJECT_TYPE = {
 }
 
 export const OUTLINE_STYLE = {
-  FILL: '#688',
+  FILL: 'steelblue',
   ACTIVE_FILL: 'yellow',
-  STROKE: '#399',
+  STROKE: 'steelblue',
   WIDTH: 2,
 }
 
