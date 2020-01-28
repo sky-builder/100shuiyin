@@ -1,4 +1,4 @@
-if: branch = master
+if: branch = fix_ci
 language: node_js
 node_js: '8.10'
 before_deploy:
