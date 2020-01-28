@@ -82,3 +82,7 @@
 .app__text-logo {
   position: absolute;
 }
+
+.app__footer {
+  padding: 10px;
+}

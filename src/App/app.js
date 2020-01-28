@@ -35,6 +35,9 @@ function App() {
         <AppAction {...chidlProps} />
       </div>
       <AppBody {...chidlProps} />
+      <div className="app__footer">
+        <a href="mailto:breakthroughtgw@gmail.com">联系作者</a>
+      </div>
     </div>
   );
 }
