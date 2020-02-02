@@ -30,6 +30,7 @@ const AppAction = props => {
   function addLogo(img) {
     let obj = getImageObject(img);
     props.setLogoList(props.logoList.concat([obj]));
+    props.setActiveLogo(obj)
   }
   function addText() {
     let obj = getTextObject();

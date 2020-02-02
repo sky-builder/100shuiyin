@@ -192,25 +192,25 @@ function PropertyPanel(props) {
             <h3 className="app__property-group-title">
               <label class="checkbox">
                 <input type="checkbox" onChange={toggleShadow} />
-                &nbsp;shadow
+                &nbsp;阴影
           </label>
             </h3>
             {
               hasShadow ? (<div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">color</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
                   <input id="js-font-stroke-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">blur</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">模糊</label>
                   <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">x offset</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">水平偏移</label>
                   <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">y offset</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">垂直偏移</label>
                   <input id="js-font-stroke-color-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
                 </div>
               </div>) : null
@@ -317,11 +317,11 @@ function PropertyPanel(props) {
                   <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
                 </div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">水平偏移量</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">水平偏移</label>
                   <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
                 </div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">垂直偏移量</label>
+                  <label htmlFor="js-font-stroke-color-input" className="">垂直偏移</label>
                   <input id="js-font-stroke-color-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
                 </div>
               </div>) : null
