@@ -34,6 +34,7 @@ const AppAction = props => {
   function addText() {
     let obj = getTextObject();
     props.setLogoList(props.logoList.concat([obj]));
+    props.setActiveLogo(obj)
   }
   function triggerModal() {
     let modal = document.querySelector('.modal');
