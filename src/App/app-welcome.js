@@ -52,8 +52,17 @@ const AppWelcome = props => {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <label htmlFor="upload-bg-image">选择背景图片</label>
-      <input id="upload-bg-image" type="file" onChange={handleBgChange} />
+      <h1 className="title is-1">拖放图片</h1>
+      <div className="file is-large">
+        <label className="file-label">
+          <input className="file-input" type="file" name="resume" onChange={handleBgChange} />
+          <span className="file-cta">
+            <span className="file-label">
+              选择图片
+      </span>
+          </span>
+        </label>
+      </div>
     </div>
   );
 };

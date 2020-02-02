@@ -1,0 +1,5 @@
+how to center new logo ?
+
+on action
+
+we should access the img width and height, and curreng logo width and height, and make x = imgWidth / 2 - logoWidth / 2, y = imgHeight / 2 - logoHeight / 2
