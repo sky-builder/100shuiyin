@@ -4,7 +4,7 @@ import { exportCanvas, drawLogoList } from '../js/utility';
 
 const AppAction = props => {
   const { bgImage, logoList } = props;
-  const { name, scale } = bgImage;
+  const { name, scale, img } = bgImage;
   function toWelcomeStage() {
     props.setPageStage(PAGE_STAGE.WELCOME);
     props.setLogoList([]);
@@ -71,17 +71,21 @@ const AppAction = props => {
     ctx.font = font;
     let text = 'hello,world';
     let w = ctx.measureText(text).width;
+    let imgWidth = img.naturalWidth;
+    let imgHeight = img.naturalHeight;
+    let x = imgWidth * 0.5 - w * 0.5;
+    let y = imgHeight * 0.5 - h * 0.5;
     let obj = {
-      x: 0,
-      y: 0,
+      x: x,
+      y: y,
       w: w,
       h: h,
       objectType: OBJECT_TYPE.TEXT,
       text: text,
       opacity: 1,
       angle: 0,
-      cx: w / 2,
-      cy: h / 2,
+      cx: x + w / 2,
+      cy: y + h / 2,
       id: props.logoId,
       color: '#000',
       bgColor: 'transparent',
