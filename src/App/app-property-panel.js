@@ -39,6 +39,15 @@ function PropertyPanel(props) {
     if (activeLogo && activeLogo.objectType === OBJECT_TYPE.TEXT) {
       document.getElementById('js-text-input').value = activeLogo.text
       document.getElementById('js-font-size-input').value = activeLogo.h;
+      document.getElementById('js-font-select').value = activeLogo.fontFamily;
+      document.getElementById('js-font-color-input').value = activeLogo.color;
+      document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
+      document.getElementById('js-opacity-input').value = activeLogo.opacity * 100;
+      document.getElementById('js-opacity-input-range').value = activeLogo.opacity * 100;
+      document.getElementById('js-text-outline-checkbox').checked = activeLogo.hasTextOutline;
+      document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
+    } else if (activeLogo && activeLogo.objectType === OBJECT_TYPE.IMAGE) {
+      document.getElementById('js-image-shadow-checkbox').checked = activeLogo.hasShadow;
     }
   }, [activeLogo]);
 
@@ -181,7 +190,7 @@ function PropertyPanel(props) {
           <div className="app__property-group">
             <h3 className="app__property-group-title">
               <label class="checkbox">
-                <input type="checkbox" onChange={toggleShadow} />
+                <input id="js-image-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
                 &nbsp;阴影
           </label>
             </h3>
@@ -220,9 +229,9 @@ function PropertyPanel(props) {
         <div className="app__property-panel">
           <div className="app__property-group">
             <div className="app__property">
-              <label htmlFor="js-text-input" className="">字体</label>
+              <label htmlFor="js-font-select" className="">字体</label>
               <div class="select">
-                <select onChange={handleFontChange}>
+                <select id="js-font-select" onChange={handleFontChange}>
                   {
                     fontList.map(font => {
                       return <option style={{ fontFamily: `${font.value}` }} value={font.value}>{font.label}</option>
@@ -248,13 +257,14 @@ function PropertyPanel(props) {
               <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
             </div>
             <div className="input-group app__property">
-              <label htmlFor="opacity-input">透明度</label>
+              <label htmlFor="js-opacity-input">透明度</label>
               <div className="input-group__body">
                 <div className="row flex-75">
                   <input
                     onChange={handleOpactiyChange}
                     value={opacity}
                     className="input-group__range"
+                    id="js-opacity-input-range"
                     type="range"
                     min="0"
                     max="100"
@@ -266,7 +276,7 @@ function PropertyPanel(props) {
                   <input
                     onChange={handleOpactiyChange}
                     value={opacity}
-                    id="opacity-input"
+                    id="js-opacity-input"
                     className="input is-small"
                     type="number"
                     min="0"
@@ -281,7 +291,7 @@ function PropertyPanel(props) {
           <div className="app__property-group">
             <h3 className="app__property-group-title">
             <label class="checkbox">
-                <input type="checkbox" onChange={toggleTextOutline} />
+                <input id="js-text-outline-checkbox" type="checkbox" onChange={toggleTextOutline} />
                 &nbsp;文字边框
           </label></h3>
           {
@@ -302,7 +312,7 @@ function PropertyPanel(props) {
           <div className="app__property-group">
             <h3 className="app__property-group-title">
               <label class="checkbox">
-                <input type="checkbox" onChange={toggleShadow} />
+                <input id="js-text-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
                 &nbsp;阴影
           </label>
             </h3>
