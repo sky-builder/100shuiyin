@@ -121,7 +121,7 @@ export function rad2deg(rad) {
   return rad * 180 / Math.PI;
 }
 
-export function drawLogoList(ctx, logoList, actionType) {
+export function drawLogoList(ctx, logoList, actionType, activeLogo) {
   for (let i = 0; i < logoList.length; i += 1) {
     ctx.save();
     ctx.globalAlpha = logoList[i].opacity || 1;
@@ -166,7 +166,7 @@ export function drawLogoList(ctx, logoList, actionType) {
       logoList[i].w = w;
       ctx.fillStyle = bgColor;
       ctx.fillRect(x, y, w, h);
-      if (hasShadow && actionType === ACTION.NONE) {
+      if (hasShadow && (logoList[i] !== activeLogo || actionType === ACTION.NONE)) {
         ctx.save();
         ctx.shadowColor = shadow.color;
         ctx.shadowBlur = shadow.blur;
