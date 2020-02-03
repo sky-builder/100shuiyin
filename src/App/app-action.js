@@ -14,6 +14,8 @@ const AppAction = props => {
   function handleLogoChange(e) {
     if (!e.target.files || !e.target.files[0]) return;
     loadLogo(e.target.files[0]);
+    // reset file input, so that same file can be select again
+    e.target.value = '';
   }
   function loadLogo(file) {
     let reader = new FileReader();
@@ -177,7 +179,7 @@ const AppAction = props => {
             <input
               className="app__logo-input"
               type="file"
-              onChange={handleLogoChange}
+              onInput={handleLogoChange}
             />
           </label>
         </button>
