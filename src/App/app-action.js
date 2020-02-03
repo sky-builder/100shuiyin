@@ -69,6 +69,7 @@ const AppAction = props => {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
     let h = 16 / scale;
+    let strokeWidth = 1 / scale;
     let font = `${parseInt(h)}px Times New Roman`;
     ctx.font = font;
     let text = 'hello,world';
@@ -91,8 +92,9 @@ const AppAction = props => {
       id: props.logoId,
       color: '#000',
       bgColor: 'transparent',
-      strokeStyle: '#000',
-      strokeWidth: 2,
+      hasTextOutline: false,
+      strokeStyle: '#fff',
+      strokeWidth: strokeWidth,
       hasShadow: false,
       shadow: {
         color: '#000000',

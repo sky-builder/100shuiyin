@@ -14,6 +14,7 @@ function PropertyPanel(props) {
   const [opacity, setOpacity] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
   const hasShadow = activeLogo && activeLogo.hasShadow;
+  const hasTextOutline = activeLogo && activeLogo.hasTextOutline;
 
   function handleOpactiyChange(e) {
     let value = e.target.value;
@@ -66,32 +67,17 @@ function PropertyPanel(props) {
   function handleColorChange(e) {
     if (!activeLogo) return;
     activeLogo.color = e.target.value;
-    let index = logoList.findIndex(item => item.id === activeLogo.id);
-    if (index !== -1) {
-      let newLogo = Object.assign({}, activeLogo);
-      setActiveLogo(newLogo);
-      logoList.splice(index, 1, newLogo);
-    }
+    updateActiveLogo();
   }
   function handleBgColorChange(e) {
     if (!activeLogo) return;
     activeLogo.bgColor = e.target.value;
-    let index = logoList.findIndex(item => item.id === activeLogo.id);
-    if (index !== -1) {
-      let newLogo = Object.assign({}, activeLogo);
-      setActiveLogo(newLogo);
-      logoList.splice(index, 1, newLogo);
-    }
+    updateActiveLogo();
   }
   function handleStrokeWidthChange(e) {
     if (!activeLogo) return;
     activeLogo.strokeWidth = +e.target.value;
-    let index = logoList.findIndex(item => item.id === activeLogo.id);
-    if (index !== -1) {
-      let newLogo = Object.assign({}, activeLogo);
-      setActiveLogo(newLogo);
-      logoList.splice(index, 1, newLogo);
-    }
+    updateActiveLogo();
   }
   function updateActiveLogo() {
     let index = logoList.findIndex(item => item.id === activeLogo.id);
@@ -108,6 +94,10 @@ function PropertyPanel(props) {
   }
   function toggleShadow(e) {
     activeLogo.hasShadow = e.target.checked;
+    updateActiveLogo();
+  }
+  function toggleTextOutline(e) {
+    activeLogo.hasTextOutline = e.target.checked;
     updateActiveLogo();
   }
   function handleShadowColorChange(e) {
@@ -289,15 +279,25 @@ function PropertyPanel(props) {
             </div>
           </div>
           <div className="app__property-group">
-            <h3 className="app__property-group-title">文字边框</h3>
-            <div className="app__property">
-              <label htmlFor="js-font-stroke-width-input" className="">宽度</label>
-              <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
-            </div>
-            <div className="app__property">
-              <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
-              <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
-            </div>
+            <h3 className="app__property-group-title">
+            <label class="checkbox">
+                <input type="checkbox" onChange={toggleTextOutline} />
+                &nbsp;文字边框
+          </label></h3>
+          {
+            hasTextOutline ? (
+              <div>
+                <div className="app__property">
+                  <label htmlFor="js-font-stroke-width-input" className="">宽度</label>
+                  <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
+                </div>
+                <div className="app__property">
+                  <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
+                  <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
+                </div>
+              </div>
+            ) : null
+          }
           </div>
           <div className="app__property-group">
             <h3 className="app__property-group-title">

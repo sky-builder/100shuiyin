@@ -156,7 +156,7 @@ export function drawLogoList(ctx, logoList, actionType) {
         );
       }
     } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-      let { text, y, h, cx, cy, fontFamily, color, bgColor, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
+      let { text, y, h, cx, cy, fontFamily, color, bgColor, hasTextOutline, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
       ctx.textBaseline = 'top';
       ctx.font = `${parseInt(h)}px ${fontFamily}`;
       const w = ctx.measureText(text).width;
@@ -179,7 +179,7 @@ export function drawLogoList(ctx, logoList, actionType) {
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
       }
-      if (strokeWidth >= 1) {
+      if (hasTextOutline && strokeWidth >= 1) {
         ctx.strokeStyle = strokeStyle;
         ctx.lineWidth = strokeWidth;
         ctx.strokeText(text, x, y, w);
