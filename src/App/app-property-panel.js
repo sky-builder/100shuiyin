@@ -46,8 +46,39 @@ function PropertyPanel(props) {
       document.getElementById('js-opacity-input-range').value = activeLogo.opacity * 100;
       document.getElementById('js-text-outline-checkbox').checked = activeLogo.hasTextOutline;
       document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
+      if (document.getElementById('js-font-stroke-width-input')) {
+        document.getElementById('js-font-stroke-width-input').value = activeLogo.strokeWidth;
+      }
+      if (document.getElementById('js-font-stroke-color-input')) {
+        document.getElementById('js-font-stroke-color-input').value = activeLogo.strokeStyle;
+      }
+      if (document.getElementById('js-text-shadow-color-input')) {
+        document.getElementById('js-text-shadow-color-input').value = activeLogo.shadow.color;
+      }
+      if (document.getElementById('js-text-shadow-blur-input')) {
+        document.getElementById('js-text-shadow-blur-input').value = activeLogo.shadow.blur;
+      }
+      if (document.getElementById('js-text-shadow-x-offset-input')) {
+        document.getElementById('js-text-shadow-x-offset-input').value = activeLogo.shadow.xOffset;
+      }
+      if (document.getElementById('js-text-shadow-y-offset-input')) {
+        document.getElementById('js-text-shadow-y-offset-input').value = activeLogo.shadow.yOffset;
+      }
+      
     } else if (activeLogo && activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       document.getElementById('js-image-shadow-checkbox').checked = activeLogo.hasShadow;
+      if (document.getElementById('js-image-shadow-color-input')) {
+        document.getElementById('js-image-shadow-color-input').value = activeLogo.shadow.color;
+      }
+      if (document.getElementById('js-image-shadow-blur-input')) {
+        document.getElementById('js-image-shadow-blur-input').value = activeLogo.shadow.blur;
+      }
+      if (document.getElementById('js-image-shadow-x-offset-input')) {
+        document.getElementById('js-image-shadow-x-offset-input').value = activeLogo.shadow.xOffset;
+      }
+      if (document.getElementById('js-image-shadow-y-offset-input')) {
+        document.getElementById('js-image-shadow-y-offset-input').value = activeLogo.shadow.yOffset;
+      }
     }
   }, [activeLogo]);
 
@@ -197,20 +228,20 @@ function PropertyPanel(props) {
             {
               hasShadow ? (<div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
-                  <input id="js-font-stroke-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
+                  <label htmlFor="js-image-shadow-color-input" className="">颜色</label>
+                  <input id="js-image-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">模糊</label>
-                  <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
+                  <label htmlFor="js-image-shadow-blur-input" className="">模糊</label>
+                  <input id="js-image-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">水平偏移</label>
-                  <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
+                  <label htmlFor="js-image-shadow-x-offset-input" className="">水平偏移</label>
+                  <input id="js-image-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
                 </div>
                 <div className="">
-                  <label htmlFor="js-font-stroke-color-input" className="">垂直偏移</label>
-                  <input id="js-font-stroke-color-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
+                  <label htmlFor="js-image-shadow-y-offset-input" className="">垂直偏移</label>
+                  <input id="js-image-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
                 </div>
               </div>) : null
             }
@@ -319,20 +350,20 @@ function PropertyPanel(props) {
             {
               hasShadow ? (<div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
-                  <input id="js-font-stroke-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
+                  <label htmlFor="js-text-shadow-color-input" className="">颜色</label>
+                  <input id="js-text-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
                 </div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">模糊</label>
-                  <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
+                  <label htmlFor="js-text-shadow-blur-input" className="">模糊</label>
+                  <input id="js-text-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
                 </div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">水平偏移</label>
-                  <input id="js-font-stroke-color-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
+                  <label htmlFor="js-text-shadow-x-offset-input" className="">水平偏移</label>
+                  <input id="js-text-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
                 </div>
                 <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">垂直偏移</label>
-                  <input id="js-font-stroke-color-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
+                  <label htmlFor="js-text-shadow-y-offset-input" className="">垂直偏移</label>
+                  <input id="js-text-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
                 </div>
               </div>) : null
             }
