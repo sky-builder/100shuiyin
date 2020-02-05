@@ -49,6 +49,7 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
+  border-bottom: 1px solid #eee;
 }
 
 .app__action > .button + .button {
@@ -71,12 +72,20 @@
 }
 .app__property-panel {
   flex: 320px 0 0;
-  padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid #eee;
+}
+.app__property-list {
   overflow-y: auto;
+  flex: 1;
+  padding: 16px;
 }
 .app__remove-logo {
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin: 16px;
   margin-top: auto;
 }
 .app__text-logo {

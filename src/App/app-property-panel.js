@@ -68,7 +68,7 @@ function PropertyPanel(props) {
       if (document.getElementById('js-text-shadow-y-offset-input')) {
         document.getElementById('js-text-shadow-y-offset-input').value = activeLogo.shadow.yOffset;
       }
-      
+
     } else if (activeLogo && activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       document.getElementById('js-image-shadow-checkbox').checked = activeLogo.hasShadow;
       if (document.getElementById('js-image-shadow-color-input')) {
@@ -194,65 +194,67 @@ function PropertyPanel(props) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       return (
         <div className="app__property-panel">
-          <div className="app__property-group">
-            <div className="input-group">
-              <label htmlFor="opacity-input">透明度</label>
-              <div className="input-group__body">
-                <div className="row flex-75">
-                  <input
-                    onChange={handleOpactiyChange}
-                    value={opacity}
-                    className="input-group__range"
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="1"
-                    disabled={isDisabled}
-                  />
-                </div>
-                <div className="row flex-25 ml-10">
-                  <input
-                    onChange={handleOpactiyChange}
-                    value={opacity}
-                    id="opacity-input"
-                    className="input is-small"
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="1"
-                    disabled={isDisabled}
-                  />
+          <div className="app__property-list">
+            <div className="app__property-group">
+              <div className="input-group">
+                <label htmlFor="opacity-input">透明度</label>
+                <div className="input-group__body">
+                  <div className="row flex-75">
+                    <input
+                      onChange={handleOpactiyChange}
+                      value={opacity}
+                      className="input-group__range"
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="1"
+                      disabled={isDisabled}
+                    />
+                  </div>
+                  <div className="row flex-25 ml-10">
+                    <input
+                      onChange={handleOpactiyChange}
+                      value={opacity}
+                      id="opacity-input"
+                      className="input is-small"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="1"
+                      disabled={isDisabled}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="app__property-group">
-            <h3 className="app__property-group-title">
-              <label class="checkbox">
-                <input id="js-image-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
-                &nbsp;阴影
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-image-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
+                  &nbsp;阴影
           </label>
-            </h3>
-            {
-              hasShadow ? (<div>
-                <div className="">
-                  <label htmlFor="js-image-shadow-color-input" className="">颜色</label>
-                  <input id="js-image-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
-                </div>
-                <div className="">
-                  <label htmlFor="js-image-shadow-blur-input" className="">模糊</label>
-                  <input id="js-image-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
-                </div>
-                <div className="">
-                  <label htmlFor="js-image-shadow-x-offset-input" className="">水平偏移</label>
-                  <input id="js-image-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
-                </div>
-                <div className="">
-                  <label htmlFor="js-image-shadow-y-offset-input" className="">垂直偏移</label>
-                  <input id="js-image-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
-                </div>
-              </div>) : null
-            }
+              </h3>
+              {
+                hasShadow ? (<div>
+                  <div className="">
+                    <label htmlFor="js-image-shadow-color-input" className="">颜色</label>
+                    <input id="js-image-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
+                  </div>
+                  <div className="">
+                    <label htmlFor="js-image-shadow-blur-input" className="">模糊</label>
+                    <input id="js-image-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
+                  </div>
+                  <div className="">
+                    <label htmlFor="js-image-shadow-x-offset-input" className="">水平偏移</label>
+                    <input id="js-image-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
+                  </div>
+                  <div className="">
+                    <label htmlFor="js-image-shadow-y-offset-input" className="">垂直偏移</label>
+                    <input id="js-image-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
+                  </div>
+                </div>) : null
+              }
+            </div>
           </div>
           <button
             className="app__remove-logo button is-danger"
@@ -266,128 +268,129 @@ function PropertyPanel(props) {
     } else {
       return (
         <div className="app__property-panel">
-          <div className="app__property-group">
-            <div className="app__property">
-              <label htmlFor="js-font-select" className="">字体</label>
-              <div class="select">
-                <select id="js-font-select" onChange={handleFontChange}>
-                  {
-                    fontList.map(font => {
-                      return <option style={{ fontFamily: `${font.value}` }} value={font.value}>{font.label}</option>
-                    })
-                  }
-                </select>
-              </div>
-            </div>
-            <div className="app__property">
-              <label htmlFor="js-text-input" className="">文本</label>
-              <input id="js-text-input" type="text" className="input" defaultValue="hello,world" onChange={evt => handleTextChange(evt)} />
-            </div>
-            <div className="app__property">
-              <label htmlFor="js-font-size-input" className="">字号</label>
-              <input id="js-font-size-input" type="number" min="0" step="1" defaultValue="16" className="input" onChange={evt => handleFontSizeChange(evt)} />
-            </div>
-            <div className="app__property">
-              <label htmlFor="js-font-color-input" className="">字体颜色</label>
-              <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
-            </div>
-            <div className="input-group app__property">
-              <label htmlFor="js-opacity-input">透明度</label>
-              <div className="input-group__body">
-                <div className="row flex-75">
-                  <input
-                    onChange={handleOpactiyChange}
-                    value={opacity}
-                    className="input-group__range"
-                    id="js-opacity-input-range"
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="1"
-                    disabled={isDisabled}
-                  />
-                </div>
-                <div className="flex-25 ml-10 row">
-                  <input
-                    onChange={handleOpactiyChange}
-                    value={opacity}
-                    id="js-opacity-input"
-                    className="input is-small"
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="1"
-                    disabled={isDisabled}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="app__property-group">
-            <h3 className="app__property-group-title">
-            <label class="checkbox">
-                <input id="js-text-bg-checkbox" type="checkbox" onChange={toggleTextBg} />
-                &nbsp;背景
-          </label></h3>
-          {
-            hasTextBg ? (
+          <div className="app__property-list">
+            <div className="app__property-group">
               <div className="app__property">
-              <label htmlFor="js-font-bg-color-input" className="">背景颜色</label>
-              <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
-            </div>
-            ) : null
-          }
-          </div>
-          <div className="app__property-group">
-            <h3 className="app__property-group-title">
-            <label class="checkbox">
-                <input id="js-text-outline-checkbox" type="checkbox" onChange={toggleTextOutline} />
-                &nbsp;文字边框
-          </label></h3>
-          {
-            hasTextOutline ? (
-              <div>
-                <div className="app__property">
-                  <label htmlFor="js-font-stroke-width-input" className="">宽度</label>
-                  <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
-                </div>
-                <div className="app__property">
-                  <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
-                  <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
+                <label htmlFor="js-font-select" className="">字体</label>
+                <div class="select">
+                  <select id="js-font-select" onChange={handleFontChange}>
+                    {
+                      fontList.map(font => {
+                        return <option style={{ fontFamily: `${font.value}` }} value={font.value}>{font.label}</option>
+                      })
+                    }
+                  </select>
                 </div>
               </div>
-            ) : null
-          }
-          </div>
-          <div className="app__property-group">
-            <h3 className="app__property-group-title">
-              <label class="checkbox">
-                <input id="js-text-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
-                &nbsp;阴影
+              <div className="app__property">
+                <label htmlFor="js-text-input" className="">文本</label>
+                <input id="js-text-input" type="text" className="input" defaultValue="hello,world" onChange={evt => handleTextChange(evt)} />
+              </div>
+              <div className="app__property">
+                <label htmlFor="js-font-size-input" className="">字号</label>
+                <input id="js-font-size-input" type="number" min="0" step="1" defaultValue="16" className="input" onChange={evt => handleFontSizeChange(evt)} />
+              </div>
+              <div className="app__property">
+                <label htmlFor="js-font-color-input" className="">字体颜色</label>
+                <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
+              </div>
+              <div className="input-group app__property">
+                <label htmlFor="js-opacity-input">透明度</label>
+                <div className="input-group__body">
+                  <div className="row flex-75">
+                    <input
+                      onChange={handleOpactiyChange}
+                      value={opacity}
+                      className="input-group__range"
+                      id="js-opacity-input-range"
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="1"
+                      disabled={isDisabled}
+                    />
+                  </div>
+                  <div className="flex-25 ml-10 row">
+                    <input
+                      onChange={handleOpactiyChange}
+                      value={opacity}
+                      id="js-opacity-input"
+                      className="input is-small"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="1"
+                      disabled={isDisabled}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-text-bg-checkbox" type="checkbox" onChange={toggleTextBg} />
+                  &nbsp;背景
+          </label></h3>
+              {
+                hasTextBg ? (
+                  <div className="app__property">
+                    <label htmlFor="js-font-bg-color-input" className="">背景颜色</label>
+                    <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
+                  </div>
+                ) : null
+              }
+            </div>
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-text-outline-checkbox" type="checkbox" onChange={toggleTextOutline} />
+                  &nbsp;文字边框
+          </label></h3>
+              {
+                hasTextOutline ? (
+                  <div>
+                    <div className="app__property">
+                      <label htmlFor="js-font-stroke-width-input" className="">宽度</label>
+                      <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />
+                    </div>
+                    <div className="app__property">
+                      <label htmlFor="js-font-stroke-color-input" className="">颜色</label>
+                      <input id="js-font-stroke-color-input" type="color" className="input" onChange={evt => handleStrokeColorChange(evt)} />
+                    </div>
+                  </div>
+                ) : null
+              }
+            </div>
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-text-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
+                  &nbsp;阴影
           </label>
-            </h3>
-            {
-              hasShadow ? (<div>
-                <div className="app__property">
-                  <label htmlFor="js-text-shadow-color-input" className="">颜色</label>
-                  <input id="js-text-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
-                </div>
-                <div className="app__property">
-                  <label htmlFor="js-text-shadow-blur-input" className="">模糊</label>
-                  <input id="js-text-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
-                </div>
-                <div className="app__property">
-                  <label htmlFor="js-text-shadow-x-offset-input" className="">水平偏移</label>
-                  <input id="js-text-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
-                </div>
-                <div className="app__property">
-                  <label htmlFor="js-text-shadow-y-offset-input" className="">垂直偏移</label>
-                  <input id="js-text-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
-                </div>
-              </div>) : null
-            }
+              </h3>
+              {
+                hasShadow ? (<div>
+                  <div className="app__property">
+                    <label htmlFor="js-text-shadow-color-input" className="">颜色</label>
+                    <input id="js-text-shadow-color-input" type="color" className="input" defaultValue="#000000" onChange={evt => handleShadowColorChange(evt)} />
+                  </div>
+                  <div className="app__property">
+                    <label htmlFor="js-text-shadow-blur-input" className="">模糊</label>
+                    <input id="js-text-shadow-blur-input" type="number" min="0" step="1" className="input" defaultValue="10" onChange={evt => handleShadowBlurChange(evt)} />
+                  </div>
+                  <div className="app__property">
+                    <label htmlFor="js-text-shadow-x-offset-input" className="">水平偏移</label>
+                    <input id="js-text-shadow-x-offset-input" type="number" min="0" step="1" className="input" defaultValue="5" onChange={evt => handleShadowXoffsetChange(evt)} />
+                  </div>
+                  <div className="app__property">
+                    <label htmlFor="js-text-shadow-y-offset-input" className="">垂直偏移</label>
+                    <input id="js-text-shadow-y-offset-input" type="number" className="input" defaultValue="5" onChange={evt => handleShadowYoffsetChange(evt)} />
+                  </div>
+                </div>) : null
+              }
+            </div>
           </div>
-
           <button
             className="app__remove-logo button is-danger"
             disabled={isDisabled}
