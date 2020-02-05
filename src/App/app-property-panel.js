@@ -286,13 +286,15 @@ function PropertyPanel(props) {
                 <label htmlFor="js-text-input" className="">文本</label>
                 <input id="js-text-input" type="text" className="input" defaultValue="hello,world" onChange={evt => handleTextChange(evt)} />
               </div>
-              <div className="app__property">
-                <label htmlFor="js-font-size-input" className="">字号</label>
-                <input id="js-font-size-input" type="number" min="0" step="1" defaultValue="16" className="input" onChange={evt => handleFontSizeChange(evt)} />
-              </div>
-              <div className="app__property">
-                <label htmlFor="js-font-color-input" className="">字体颜色</label>
-                <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
+              <div className="app__property app__property--row">
+                <div className="app__property">
+                  <label htmlFor="js-font-size-input" className="">字号</label>
+                  <input id="js-font-size-input" type="number" min="0" step="1" defaultValue="16" className="input" onChange={evt => handleFontSizeChange(evt)} />
+                </div>
+                <div className="app__property">
+                  <label htmlFor="js-font-color-input" className="">颜色</label>
+                  <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
+                </div>
               </div>
               <div className="input-group app__property">
                 <label htmlFor="js-opacity-input">透明度</label>
@@ -349,7 +351,7 @@ function PropertyPanel(props) {
           </label></h3>
               {
                 hasTextOutline ? (
-                  <div>
+                  <div className="app__property app__property--row">
                     <div className="app__property">
                       <label htmlFor="js-font-stroke-width-input" className="">宽度</label>
                       <input id="js-font-stroke-width-input" type="number" className="input" defaultValue="1" onChange={evt => handleStrokeWidthChange(evt)} />

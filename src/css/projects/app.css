@@ -98,3 +98,16 @@
 .app__picture {
   width: 250px;
 }
+.app__property--row {
+  flex-direction: row;
+}
+.app__property--row .app__property:first-child {
+  flex: 75% 1 1;
+}
+.app__property--row .app__property:last-child {
+  flex: 25% 1 1;
+}
+.app__property--row .app__property + .app__property {
+  margin-left: 10px;
+  margin-top: 0;
+}
