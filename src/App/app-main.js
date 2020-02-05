@@ -42,7 +42,7 @@ const AppMain = props => {
     let canvas = document.querySelector('.app__canvas');
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawLogoList(ctx, logoList, actionType, activeLogo);
+    drawLogoList(ctx, logoList, actionType, activeLogo, bgImage.img.naturalWidth, bgImage.img.naturalHeight);
     for(let logo of logoList) {
       if (logo === activeLogo) {
         ctx.save();

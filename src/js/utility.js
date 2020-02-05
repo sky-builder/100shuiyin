@@ -121,7 +121,7 @@ export function rad2deg(rad) {
   return rad * 180 / Math.PI;
 }
 
-export function drawLogoList(ctx, logoList, actionType, activeLogo) {
+export function drawLogoList(ctx, logoList, actionType, activeLogo, imgWidth, imgHeight) {
   for (let i = 0; i < logoList.length; i += 1) {
     ctx.save();
     ctx.globalAlpha = logoList[i].opacity || 1;
@@ -164,27 +164,110 @@ export function drawLogoList(ctx, logoList, actionType, activeLogo) {
       logoList[i].x = x;
       logoList[i].y = cy - h / 2;
       logoList[i].w = w;
+
       if (hasTextBg) {
         ctx.fillStyle = bgColor;
         ctx.fillRect(x, y, w, h);
       }
-      if (hasShadow && (logoList[i] !== activeLogo || actionType === ACTION.NONE)) {
-        ctx.save();
+      let isDrawShadow = hasShadow && (logoList[i] !== activeLogo || actionType === ACTION.NONE);
+      if (isDrawShadow) {
+        // ctx.save();
         ctx.shadowColor = shadow.color;
         ctx.shadowBlur = shadow.blur;
         ctx.shadowOffsetX = shadow.xOffset;
         ctx.shadowOffsetY = shadow.yOffset;
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
-        ctx.restore();
+        // ctx.restore();
       } else {
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
       }
-      if (hasTextOutline && strokeWidth >= 1) {
+      let isDrawOutline = hasTextOutline && strokeWidth >= 1
+      if (isDrawOutline) {
         ctx.strokeStyle = strokeStyle;
         ctx.lineWidth = strokeWidth;
         ctx.strokeText(text, x, y, w);
+      }
+      if (logoList[i] === activeLogo) {
+        let { w, h, x, y } = activeLogo;
+        let gap = 10;
+        let leftCount = Math.ceil(x / (w + gap));
+        let rightCount = Math.ceil((imgWidth - x - w) / (w + gap));
+        let topCount = Math.ceil(y / (h + gap));
+        let bottomCount = Math.ceil((imgHeight - y - h) / (h + gap));
+        ctx.save();
+        if (isDrawShadow) {
+          ctx.shadowColor = shadow.color;
+          ctx.shadowBlur = shadow.blur;
+          ctx.shadowOffsetX = shadow.xOffset;
+          ctx.shadowOffsetY = shadow.yOffset;
+        }
+        if (isDrawOutline) {
+          ctx.strokeStyle = strokeStyle;
+          ctx.lineWidth = strokeWidth;
+        }
+        for (let i = 0; i < topCount; i += 1) {
+          for (let j = 0; j <= leftCount; j += 1) {
+            let nx = x - (j * (w + gap));
+            let ny = y - ((i + 1) * (h + gap));
+            if (hasTextBg) {
+              ctx.fillStyle = bgColor;
+              ctx.fillRect(nx, ny, w, h);
+            }
+            ctx.fillStyle = color;
+            ctx.fillText(text, nx, ny, w);
+            if (isDrawOutline) {
+              ctx.strokeText(text, nx, ny, w);
+            }
+           
+          }
+          for (let j = 0; j < rightCount; j += 1) {
+            let nx = x + ((j + 1) * (w + gap));
+            let ny = y - ((i + 1) * (h + gap));
+            if (hasTextBg) {
+              ctx.fillStyle = bgColor;
+              ctx.fillRect(nx, ny, w, h);
+            }
+            ctx.fillStyle = color;
+            ctx.fillText(text, nx, ny, w);
+            if (isDrawOutline) {
+              ctx.strokeText(text, nx, ny, w);
+            }
+           
+          }
+        }
+        for (let i = 0; i <= bottomCount; i += 1) {
+          for (let j = 0; j <= leftCount; j += 1) {
+            if (i === 0 && j === 0) continue;
+            let nx = x - (j * (w + gap));
+            let ny = y + (i * (h + gap));
+            if (hasTextBg) {
+              ctx.fillStyle = bgColor;
+              ctx.fillRect(nx, ny, w, h);
+            }
+            ctx.fillStyle = color;
+            ctx.fillText(text, nx, ny, w);
+            if (isDrawOutline) {
+              ctx.strokeText(text, nx, ny, w);
+            }
+           
+          }
+          for (let j = 0; j < rightCount; j += 1) {
+            let nx = x + ((j + 1) * (w + gap));
+            let ny = y + (i * (h + gap));
+            if (hasTextBg) {
+              ctx.fillStyle = bgColor;
+              ctx.fillRect(nx, ny, w, h);
+            }
+            ctx.fillStyle = color;
+            ctx.fillText(text, nx, ny, w);
+            if (isDrawOutline) {
+              ctx.strokeText(text, nx, ny, w);
+            }
+          }
+        }
+        ctx.restore();
       }
     }
     ctx.restore();
