@@ -15,6 +15,7 @@ function PropertyPanel(props) {
   const [isDisabled, setIsDisabled] = useState(false);
   const hasShadow = activeLogo && activeLogo.hasShadow;
   const hasTextOutline = activeLogo && activeLogo.hasTextOutline;
+  const hasTextBg = activeLogo && activeLogo.hasTextBg;
 
   function handleOpactiyChange(e) {
     let value = e.target.value;
@@ -41,11 +42,14 @@ function PropertyPanel(props) {
       document.getElementById('js-font-size-input').value = activeLogo.h;
       document.getElementById('js-font-select').value = activeLogo.fontFamily;
       document.getElementById('js-font-color-input').value = activeLogo.color;
-      document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
       document.getElementById('js-opacity-input').value = activeLogo.opacity * 100;
       document.getElementById('js-opacity-input-range').value = activeLogo.opacity * 100;
       document.getElementById('js-text-outline-checkbox').checked = activeLogo.hasTextOutline;
       document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
+      document.getElementById('js-text-bg-checkbox').checked = activeLogo.hasTextBg;
+      if (document.getElementById('js-font-bg-color-input')) {
+        document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
+      }
       if (document.getElementById('js-font-stroke-width-input')) {
         document.getElementById('js-font-stroke-width-input').value = activeLogo.strokeWidth;
       }
@@ -158,6 +162,10 @@ function PropertyPanel(props) {
   }
   function handleFontChange(e) {
     activeLogo.fontFamily = e.target.value;
+    updateActiveLogo();
+  }
+  function toggleTextBg(e) {
+    activeLogo.hasTextBg = e.target.checked;
     updateActiveLogo();
   }
   const fontList = [
@@ -283,10 +291,6 @@ function PropertyPanel(props) {
               <label htmlFor="js-font-color-input" className="">字体颜色</label>
               <input id="js-font-color-input" type="color" className="input" onChange={evt => handleColorChange(evt)} />
             </div>
-            <div className="app__property">
-              <label htmlFor="js-font-bg-color-input" className="">背景颜色</label>
-              <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
-            </div>
             <div className="input-group app__property">
               <label htmlFor="js-opacity-input">透明度</label>
               <div className="input-group__body">
@@ -318,6 +322,21 @@ function PropertyPanel(props) {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="app__property-group">
+            <h3 className="app__property-group-title">
+            <label class="checkbox">
+                <input id="js-text-bg-checkbox" type="checkbox" onChange={toggleTextBg} />
+                &nbsp;背景
+          </label></h3>
+          {
+            hasTextBg ? (
+              <div className="app__property">
+              <label htmlFor="js-font-bg-color-input" className="">背景颜色</label>
+              <input id="js-font-bg-color-input" type="color" className="input" onChange={evt => handleBgColorChange(evt)} />
+            </div>
+            ) : null
+          }
           </div>
           <div className="app__property-group">
             <h3 className="app__property-group-title">
