@@ -304,6 +304,7 @@ const AppMain = props => {
         return;
       }
     }
+    setActiveLogo(null);
   }
   function verticalResize(e) {
     let [x, y] = getPos(e);
