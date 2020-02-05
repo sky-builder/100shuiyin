@@ -70,7 +70,7 @@ const AppAction = props => {
   function getTextObject() {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
-    let h = 16 / scale;
+    let h = 100 / scale;
     let strokeWidth = 1;
     let font = `${parseInt(h)}px Times New Roman`;
     ctx.font = font;
@@ -92,12 +92,12 @@ const AppAction = props => {
       cx: x + w / 2,
       cy: y + h / 2,
       id: props.logoId,
-      color: '#000',
+      color: '#ffffff',
       bgColor: 'transparent',
       hasTextOutline: false,
-      strokeStyle: '#fff',
+      strokeStyle: '#333333',
       strokeWidth: strokeWidth,
-      hasShadow: false,
+      hasShadow: true,
       shadow: {
         color: '#000000',
         blur: 10,

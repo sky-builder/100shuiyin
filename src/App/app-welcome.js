@@ -52,8 +52,10 @@ const AppWelcome = props => {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <h1 className="title is-1">拖放图片</h1>
-      <div className="file is-large">
+      <h1 className="title">爱水印 - 在线水印制作</h1>
+      <h2 className="subtitle">简单、快捷、免费</h2>
+      <img className="app__picture" src="/picture.png" alt="picture"/>
+      <div className="file is-info is-large">
         <label className="file-label">
           <input className="file-input" type="file" name="resume" onChange={handleBgChange} />
           <span className="file-cta">
@@ -63,6 +65,7 @@ const AppWelcome = props => {
           </span>
         </label>
       </div>
+      <h1>或者拖放一张图片</h1>
     </div>
   );
 };

@@ -9,7 +9,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  height: 80px;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .app__property {
@@ -33,7 +34,7 @@
 }
 
 .app__logo {
-  height: 60px;
+  height: 32px;
 }
 
 .app__logo-input {
@@ -60,10 +61,6 @@
   justify-content: center;
   align-items: center;
 }
-.app__welcome .title {
-  color: #fff;
-  opacity: 0.75;
-}
 .app__main {
   position: relative;
   display: flex;
@@ -88,4 +85,7 @@
 
 .app__footer {
   padding: 10px;
+}
+.app__picture {
+  width: 250px;
 }
