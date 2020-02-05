@@ -3,7 +3,7 @@ import { PAGE_STAGE, ACTION, OBJECT_TYPE, SCALE_TYPE } from '../js/enum';
 import { exportCanvas, drawLogoList } from '../js/utility';
 
 const AppAction = props => {
-  const { bgImage, logoList } = props;
+  const { bgImage, logoList, activeLogo } = props;
   const { name, scale, img } = bgImage;
   function toWelcomeStage() {
     props.setPageStage(PAGE_STAGE.WELCOME);
@@ -51,7 +51,7 @@ const AppAction = props => {
     canvas.height = bg.height;
     let ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0); 
-    drawLogoList(ctx, logoList, ACTION.NONE);
+    drawLogoList(ctx, logoList, ACTION.NONE, activeLogo, bgImage.img.naturalWidth, bgImage.img.naturalHeight);
     let nameInput = document.getElementById('js-image-name-input');
     let name = nameInput.value;
     exportCanvas(canvas, name, option);
@@ -97,6 +97,8 @@ const AppAction = props => {
       bgColor: '#333333',
       hasTextOutline: false,
       strokeStyle: '#333333',
+      isTile: false,
+      tileGap: 100,
       strokeWidth: strokeWidth,
       hasShadow: true,
       shadow: {
@@ -123,6 +125,8 @@ const AppAction = props => {
       img: img,
       opacity: 1,
       angle: 0,
+      isTile: false,
+      tileGap: 100,
       objectType: OBJECT_TYPE.IMAGE,
       cx: nw / 2,
       cy: nh / 2,

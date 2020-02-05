@@ -121,7 +121,7 @@ export function rad2deg(rad) {
   return rad * 180 / Math.PI;
 }
 
-export function drawLogoList(ctx, logoList, actionType, activeLogo) {
+export function drawLogoList(ctx, logoList, actionType, activeLogo, imgWidth, imgHeight) {
   for (let i = 0; i < logoList.length; i += 1) {
     ctx.save();
     ctx.globalAlpha = logoList[i].opacity || 1;
@@ -155,6 +155,11 @@ export function drawLogoList(ctx, logoList, actionType, activeLogo) {
           logoList[i].h
         );
       }
+      if (logoList[i].isTile) {
+        drawTileImage(ctx, logoList[i], imgWidth, imgHeight, {
+          isDrawShadow: hasShadow && actionType === ACTION.NONE
+        })
+      }
     } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
       let { text, y, h, cx, cy, fontFamily, color, hasTextBg, bgColor, hasTextOutline, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
       ctx.textBaseline = 'top';
@@ -164,29 +169,145 @@ export function drawLogoList(ctx, logoList, actionType, activeLogo) {
       logoList[i].x = x;
       logoList[i].y = cy - h / 2;
       logoList[i].w = w;
+
       if (hasTextBg) {
         ctx.fillStyle = bgColor;
         ctx.fillRect(x, y, w, h);
       }
-      if (hasShadow && (logoList[i] !== activeLogo || actionType === ACTION.NONE)) {
-        ctx.save();
+      let isDrawShadow = hasShadow && (logoList[i] !== activeLogo || actionType === ACTION.NONE);
+      if (isDrawShadow) {
+        // ctx.save();
         ctx.shadowColor = shadow.color;
         ctx.shadowBlur = shadow.blur;
         ctx.shadowOffsetX = shadow.xOffset;
         ctx.shadowOffsetY = shadow.yOffset;
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
-        ctx.restore();
+        // ctx.restore();
       } else {
         ctx.fillStyle = color;
         ctx.fillText(text, x, y, w);
       }
-      if (hasTextOutline && strokeWidth >= 1) {
+      let isDrawOutline = hasTextOutline && strokeWidth >= 1
+      if (isDrawOutline) {
         ctx.strokeStyle = strokeStyle;
         ctx.lineWidth = strokeWidth;
         ctx.strokeText(text, x, y, w);
       }
+      if (logoList[i].isTile) {
+        drawTileText(ctx, logoList[i], imgWidth, imgHeight, {
+          isDrawShadow,
+          isDrawOutline,
+          hasTextBg
+        });
+      }
     }
     ctx.restore();
   }
+}
+function drawTileImage(ctx, logo, imageWidth, imageHeight, option = {}) {
+  let { img, w, h, x, y, tileGap, shadow } = logo;
+  let { isDrawShadow } = option;
+  let leftCount = Math.ceil(x / (w + tileGap));
+  let rightCount = Math.ceil((imageWidth - x - w) / (w + tileGap));
+  let topCount = Math.ceil(y / (h + tileGap));
+  let bottomCount = Math.ceil((imageHeight - y - h) / (h + tileGap));
+  ctx.save();
+  if (isDrawShadow) {
+    ctx.shadowColor = shadow.color;
+    ctx.shadowBlur = shadow.blur;
+    ctx.shadowOffsetX = shadow.xOffset;
+    ctx.shadowOffsetY = shadow.yOffset;
+  }
+  function draw(x, y) {
+    ctx.drawImage(
+      img,
+      x,
+      y,
+      w,
+      h
+    );
+  }
+  for (let i = 0; i < topCount; i += 1) {
+    for (let j = 0; j <= leftCount; j += 1) {
+      let nx = x - (j * (w + tileGap));
+      let ny = y - ((i + 1) * (h + tileGap));
+      draw(nx, ny);
+    }
+    for (let j = 0; j < rightCount; j += 1) {
+      let nx = x + ((j + 1) * (w + tileGap));
+      let ny = y - ((i + 1) * (h + tileGap));
+      draw(nx, ny);
+    }
+  }
+  for (let i = 0; i <= bottomCount; i += 1) {
+    for (let j = 0; j <= leftCount; j += 1) {
+      if (i === 0 && j === 0) continue;
+      let nx = x - (j * (w + tileGap));
+      let ny = y + (i * (h + tileGap));
+      draw(nx, ny);
+    }
+    for (let j = 0; j < rightCount; j += 1) {
+      let nx = x + ((j + 1) * (w + tileGap));
+      let ny = y + (i * (h + tileGap));
+      draw(nx, ny);
+    }
+  }
+  ctx.restore();
+}
+function drawTileText(ctx, logo, imageWidth, imageHeight, option = {}) {
+  let { w, h, x, y, color, bgColor, text, tileGap, shadow, strokeStyle, strokeWidth } = logo;
+  let leftCount = Math.ceil(x / (w + tileGap));
+  let rightCount = Math.ceil((imageWidth - x - w) / (w + tileGap));
+  let topCount = Math.ceil(y / (h + tileGap));
+  let bottomCount = Math.ceil((imageHeight - y - h) / (h + tileGap));
+  let { isDrawShadow, isDrawOutline, hasTextBg } = option;
+  ctx.save();
+  if (isDrawShadow) {
+    ctx.shadowColor = shadow.color;
+    ctx.shadowBlur = shadow.blur;
+    ctx.shadowOffsetX = shadow.xOffset;
+    ctx.shadowOffsetY = shadow.yOffset;
+  }
+  if (isDrawOutline) {
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = strokeWidth;
+  }
+  function draw(x, y) {
+    if (hasTextBg) {
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(x, y, w, h);
+    }
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y, w);
+    if (isDrawOutline) {
+      ctx.strokeText(text, x, y, w);
+    }
+  }
+  for (let i = 0; i < topCount; i += 1) {
+    for (let j = 0; j <= leftCount; j += 1) {
+      let nx = x - (j * (w + tileGap));
+      let ny = y - ((i + 1) * (h + tileGap));
+      draw(nx, ny);
+    }
+    for (let j = 0; j < rightCount; j += 1) {
+      let nx = x + ((j + 1) * (w + tileGap));
+      let ny = y - ((i + 1) * (h + tileGap));
+      draw(nx, ny);
+    }
+  }
+  for (let i = 0; i <= bottomCount; i += 1) {
+    for (let j = 0; j <= leftCount; j += 1) {
+      if (i === 0 && j === 0) continue;
+      let nx = x - (j * (w + tileGap));
+      let ny = y + (i * (h + tileGap));
+      draw(nx, ny);
+    }
+    for (let j = 0; j < rightCount; j += 1) {
+      let nx = x + ((j + 1) * (w + tileGap));
+      let ny = y + (i * (h + tileGap));
+      draw(nx, ny);
+    }
+  }
+  ctx.restore();
 }
