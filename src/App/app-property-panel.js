@@ -12,10 +12,12 @@ function PropertyPanel(props) {
   } = props;
 
   const [opacity, setOpacity] = useState(100);
+  const [tileGap, setTileGap] = useState(100);
   const [isDisabled, setIsDisabled] = useState(false);
   const hasShadow = activeLogo && activeLogo.hasShadow;
   const hasTextOutline = activeLogo && activeLogo.hasTextOutline;
   const hasTextBg = activeLogo && activeLogo.hasTextBg;
+  const isTile = activeLogo && activeLogo.isTile;
 
   function handleOpactiyChange(e) {
     let value = e.target.value;
@@ -37,6 +39,7 @@ function PropertyPanel(props) {
   useEffect(() => {
     setIsDisabled(!activeLogo);
     setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
+    setTileGap(activeLogo ? activeLogo.tileGap : 100);
     if (activeLogo && activeLogo.objectType === OBJECT_TYPE.TEXT) {
       document.getElementById('js-text-input').value = activeLogo.text
       document.getElementById('js-font-size-input').value = activeLogo.h;
@@ -47,6 +50,7 @@ function PropertyPanel(props) {
       document.getElementById('js-text-outline-checkbox').checked = activeLogo.hasTextOutline;
       document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
       document.getElementById('js-text-bg-checkbox').checked = activeLogo.hasTextBg;
+      document.getElementById('js-text-tile-checkbox').checked = activeLogo.isTile;
       if (document.getElementById('js-font-bg-color-input')) {
         document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
       }
@@ -68,9 +72,10 @@ function PropertyPanel(props) {
       if (document.getElementById('js-text-shadow-y-offset-input')) {
         document.getElementById('js-text-shadow-y-offset-input').value = activeLogo.shadow.yOffset;
       }
-
+      
     } else if (activeLogo && activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       document.getElementById('js-image-shadow-checkbox').checked = activeLogo.hasShadow;
+      document.getElementById('js-image-tile-checkbox').checked = activeLogo.isTile;
       if (document.getElementById('js-image-shadow-color-input')) {
         document.getElementById('js-image-shadow-color-input').value = activeLogo.shadow.color;
       }
@@ -85,7 +90,10 @@ function PropertyPanel(props) {
       }
     }
   }, [activeLogo]);
-
+  function toggleTile(e) {
+    activeLogo.isTile = e.target.checked;
+    updateActiveLogo();
+  }
   function handleTextChange(e) {
     if (!activeLogo) return;
     let text = e.target.value;
@@ -168,6 +176,11 @@ function PropertyPanel(props) {
     activeLogo.hasTextBg = e.target.checked;
     updateActiveLogo();
   }
+  function handleTileGapChange(e) {
+    activeLogo.tileGap = +e.target.value;
+    setTileGap(e.target.value);
+    updateActiveLogo();
+  }
   const fontList = [
     {
       label: 'Times New Roman',
@@ -226,6 +239,50 @@ function PropertyPanel(props) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-image-tile-checkbox" type="checkbox" onChange={toggleTile} />
+                  &nbsp;平铺
+          </label>
+              </h3>
+              {
+                isTile ?
+                  (
+                    <div className="input-group">
+                      <label htmlFor="js-image-tile-gap-input">间距</label>
+                      <div className="input-group__body">
+                        <div className="row flex-75">
+                          <input
+                            onChange={handleTileGapChange}
+                            value={tileGap}
+                            className="input-group__range"
+                            id="js-image-tile-gap-range-input"
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="1"
+                            disabled={isDisabled}
+                          />
+                        </div>
+                        <div className="row flex-25 ml-10">
+                          <input
+                            onChange={handleTileGapChange}
+                            value={tileGap}
+                            id="js-image-tile-gap-input"
+                            className="input is-small"
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="1"
+                            disabled={isDisabled}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : null
+              }
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
@@ -327,6 +384,50 @@ function PropertyPanel(props) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="app__property-group">
+              <h3 className="app__property-group-title">
+                <label class="checkbox">
+                  <input id="js-text-tile-checkbox" type="checkbox" onChange={toggleTile} />
+                  &nbsp;平铺
+          </label>
+              </h3>
+              {
+                isTile ?
+                  (
+                    <div className="input-group">
+                      <label htmlFor="js-text-tile-gap-input">间距</label>
+                      <div className="input-group__body">
+                        <div className="row flex-75">
+                          <input
+                            onChange={handleTileGapChange}
+                            value={tileGap}
+                            className="input-group__range"
+                            id="js-text-tile-gap-range-input"
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="1"
+                            disabled={isDisabled}
+                          />
+                        </div>
+                        <div className="row flex-25 ml-10">
+                          <input
+                            onChange={handleTileGapChange}
+                            value={tileGap}
+                            id="js-text-tile-gap-input"
+                            className="input is-small"
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="1"
+                            disabled={isDisabled}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : null
+              }
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
