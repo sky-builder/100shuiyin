@@ -326,13 +326,7 @@ const AppMain = props => {
     ctx.font = `${parseInt(h)}px ${fontFamily}`;
     let w = ctx.measureText(activeLogo.text).width;
     activeLogo.w = w;
-    activeLogo.x = cx - w / 2;
-    let index = logoList.findIndex(item => item.id === activeLogo.id);
-    if (index !== -1) {
-      let newLogo = Object.assign({}, activeLogo);
-      setActiveLogo(newLogo);
-      logoList.splice(index, 1, newLogo);
-    }
+    activeLogo.x = cx - w * 0.5;
   }
   function horizontalResize(e) {
     let [x, y] = getPos(e);
