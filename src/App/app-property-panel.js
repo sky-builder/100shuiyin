@@ -3,7 +3,6 @@ import { OBJECT_TYPE, ACTION } from '../js/enum';
 
 function PropertyPanel(props) {
   const {
-    bgImage,
     activeLogo,
     setActiveLogo,
     logoList,
@@ -38,15 +37,13 @@ function PropertyPanel(props) {
   }
   useEffect(() => {
     setIsDisabled(!activeLogo);
-    setOpacity(activeLogo ? activeLogo.opacity * 100 : 100);
-    setTileGap(activeLogo ? activeLogo.tileGap : 100);
+    setOpacity(activeLogo && activeLogo.opacity ? activeLogo.opacity * 100 : 100);
+    setTileGap(activeLogo && activeLogo.tileGap ? activeLogo.tileGap : 100);
     if (activeLogo && activeLogo.objectType === OBJECT_TYPE.TEXT) {
       document.getElementById('js-text-input').value = activeLogo.text
       document.getElementById('js-font-size-input').value = activeLogo.h;
       document.getElementById('js-font-select').value = activeLogo.fontFamily;
       document.getElementById('js-font-color-input').value = activeLogo.color;
-      document.getElementById('js-opacity-input').value = activeLogo.opacity * 100;
-      document.getElementById('js-opacity-input-range').value = activeLogo.opacity * 100;
       document.getElementById('js-text-outline-checkbox').checked = activeLogo.hasTextOutline;
       document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
       document.getElementById('js-text-bg-checkbox').checked = activeLogo.hasTextBg;
@@ -259,7 +256,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-image-tile-checkbox" type="checkbox" onChange={toggleTile} />
                   &nbsp;平铺
           </label>
@@ -303,7 +300,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-image-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
                   &nbsp;阴影
           </label>
@@ -346,7 +343,7 @@ function PropertyPanel(props) {
             <div className="app__property-group">
               <div className="app__property">
                 <label htmlFor="js-font-select" className="">字体</label>
-                <div class="select">
+                <div className="select">
                   <select id="js-font-select" onChange={handleFontChange}>
                     {
                       fontList.map(font => {
@@ -404,7 +401,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-text-tile-checkbox" type="checkbox" onChange={toggleTile} />
                   &nbsp;平铺
           </label>
@@ -448,7 +445,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-text-bg-checkbox" type="checkbox" onChange={toggleTextBg} />
                   &nbsp;背景
           </label></h3>
@@ -463,7 +460,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-text-outline-checkbox" type="checkbox" onChange={toggleTextOutline} />
                   &nbsp;文字边框
           </label></h3>
@@ -484,7 +481,7 @@ function PropertyPanel(props) {
             </div>
             <div className="app__property-group">
               <h3 className="app__property-group-title">
-                <label class="checkbox">
+                <label className="checkbox">
                   <input id="js-text-shadow-checkbox" type="checkbox" onChange={toggleShadow} />
                   &nbsp;阴影
           </label>
