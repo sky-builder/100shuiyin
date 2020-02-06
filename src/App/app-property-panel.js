@@ -201,8 +201,25 @@ function PropertyPanel(props) {
     }, {
       label: 'Noto Sans SC',
       value: 'Noto Sans SC, sans-serif'
+    },
+    {
+      label: 'Noto Serif SC',
+      value: 'Noto Serif SC, serif'
+    },
+    {
+      label: 'Liu Jian Mao Cao',
+      value: 'Liu Jian Mao Cao, cursive'
+    },
+    {
+      label: 'Long Cang',
+      value: 'Long Cang, cursive'
+    },
+    {
+      label: 'ZCOOL XiaoWei',
+      value: 'ZCOOL XiaoWei, serif'
     }
   ]
+   fontList.sort((a, b) => a.label < b.label ? -1 : 1)
   if (activeLogo) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       return (
