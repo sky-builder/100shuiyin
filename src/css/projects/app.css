@@ -111,3 +111,17 @@
   margin-left: 10px;
   margin-top: 0;
 }
+
+.app__font {
+  display: flex;
+  flex-direction: row;
+}
+.app__font svg {
+  flex: 2.5rem 0 0;
+  margin-left: 10px;
+  fill: #666;
+  cursor: pointer;
+}
+.app__font svg.active {
+  fill: steelblue;
+}

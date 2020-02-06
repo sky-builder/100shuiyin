@@ -2,6 +2,7 @@ import React from 'react';
 import { PAGE_STAGE, ACTION, OBJECT_TYPE, SCALE_TYPE } from '../js/enum';
 import { exportCanvas, drawLogoList } from '../js/utility';
 
+
 const AppAction = props => {
   const { bgImage, logoList, activeLogo } = props;
   const { name, scale, img } = bgImage;
@@ -101,6 +102,7 @@ const AppAction = props => {
       tileGap: 100,
       strokeWidth: strokeWidth,
       hasShadow: true,
+      isItalic: false,
       shadow: {
         color: '#000000',
         blur: 10,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OBJECT_TYPE, ACTION } from '../js/enum';
+import { ReactComponent as ItalicIcon } from '../icons/text-formatting.svg';
 
 function PropertyPanel(props) {
   const {
@@ -48,6 +49,11 @@ function PropertyPanel(props) {
       document.getElementById('js-text-shadow-checkbox').checked = activeLogo.hasShadow;
       document.getElementById('js-text-bg-checkbox').checked = activeLogo.hasTextBg;
       document.getElementById('js-text-tile-checkbox').checked = activeLogo.isTile;
+      let italicCheckbox =  document.getElementById('js-font-italic-checkbox');
+      italicCheckbox.classList.remove('active');
+      if (activeLogo.isItalic) {
+        italicCheckbox.classList.add('active')
+      }
       if (document.getElementById('js-font-bg-color-input')) {
         document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
       }
@@ -69,7 +75,7 @@ function PropertyPanel(props) {
       if (document.getElementById('js-text-shadow-y-offset-input')) {
         document.getElementById('js-text-shadow-y-offset-input').value = activeLogo.shadow.yOffset;
       }
-      
+
     } else if (activeLogo && activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       document.getElementById('js-image-shadow-checkbox').checked = activeLogo.hasShadow;
       document.getElementById('js-image-tile-checkbox').checked = activeLogo.isTile;
@@ -216,7 +222,15 @@ function PropertyPanel(props) {
       value: 'ZCOOL XiaoWei, serif'
     }
   ]
-   fontList.sort((a, b) => a.label < b.label ? -1 : 1)
+  function handleItalicChange(e) {
+    activeLogo.isItalic = !activeLogo.isItalic;
+    e.target.classList.remove('active');
+    if (activeLogo.isItalic) {
+      e.target.classList.add('active');
+    }
+    updateActiveLogo();
+  }
+  fontList.sort((a, b) => a.label < b.label ? -1 : 1)
   if (activeLogo) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
       return (
@@ -343,14 +357,17 @@ function PropertyPanel(props) {
             <div className="app__property-group">
               <div className="app__property">
                 <label htmlFor="js-font-select" className="">字体</label>
-                <div className="select">
-                  <select id="js-font-select" onChange={handleFontChange}>
-                    {
-                      fontList.map(font => {
-                        return <option style={{ fontFamily: `${font.value}` }} key={font.label} value={font.value}>{font.label}</option>
-                      })
-                    }
-                  </select>
+                <div className="app__font">
+                  <div className="select">
+                    <select id="js-font-select" onChange={handleFontChange}>
+                      {
+                        fontList.map(font => {
+                          return <option style={{ fontFamily: `${font.value}` }} key={font.label} value={font.value}>{font.label}</option>
+                        })
+                      }
+                    </select>
+                  </div>
+                  <ItalicIcon id="js-font-italic-checkbox" onClick={handleItalicChange} />
                 </div>
               </div>
               <div className="app__property">
