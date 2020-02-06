@@ -70,14 +70,14 @@ const AppAction = props => {
   function getTextObject() {
     let cv = document.querySelector('.app__bg');
     let ctx = cv.getContext('2d');
-    let h = 100 / scale;
+    let imgWidth = img.naturalWidth;
+    let imgHeight = img.naturalHeight;
+    let h = Math.min(imgWidth, imgHeight) * 0.1;
     let strokeWidth = 1;
     let font = `${parseInt(h)}px Times New Roman`;
     ctx.font = font;
     let text = 'hello,world';
     let w = ctx.measureText(text).width;
-    let imgWidth = img.naturalWidth;
-    let imgHeight = img.naturalHeight;
     let x = imgWidth * 0.5 - w * 0.5;
     let y = imgHeight * 0.5 - h * 0.5;
     let obj = {
@@ -115,8 +115,11 @@ const AppAction = props => {
   function getImageObject(img) {
     let nh = img.naturalHeight;
     let nw = img.naturalWidth;
-    nw /= scale;
-    nh /= scale;
+    let imgWidth = bgImage.img.naturalWidth;
+    let imgHeight = bgImage.img.naturalHeight;
+    let s = nw / nh;
+    nw = Math.min(imgWidth, imgHeight) * 0.25
+    nh = nw / s;
     let obj = {
       x: 0,
       y: 0,
