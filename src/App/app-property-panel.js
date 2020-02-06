@@ -350,7 +350,7 @@ function PropertyPanel(props) {
                   <select id="js-font-select" onChange={handleFontChange}>
                     {
                       fontList.map(font => {
-                        return <option style={{ fontFamily: `${font.value}` }} value={font.value}>{font.label}</option>
+                        return <option style={{ fontFamily: `${font.value}` }} key={font.label} value={font.value}>{font.label}</option>
                       })
                     }
                   </select>
