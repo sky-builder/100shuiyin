@@ -5,9 +5,9 @@ import {
 
 function AppLogo() {
   return (
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a  class="navbar-item" href="/">
+    <nav className="navbar" role="navigation" aria-label="main navigation">
+      <div className="navbar-brand">
+        <a  className="navbar-item" href="/">
           <svg data-v-423bf9ae=""
             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 90" className="app__logo">
             <g data-v-423bf9ae="" id="40937b7b-8e45-4e46-a779-8b935e9d5ef4" fill="#333" transform="matrix(4.590555667877197,0,0,4.590555667877197,105.55290222167969,15.053796768188477)">
@@ -24,15 +24,18 @@ function AppLogo() {
             </g>
           </svg>
         </a>
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <Link class="navbar-item" to="/faq" >FAQ</Link>
+      <div id="navbarBasicExample" className="navbar-menu">
+        <div className="navbar-start">
+          <Link className="navbar-item" to="/features" >功能简介</Link>
+        </div>
+        <div className="navbar-start">
+          <Link className="navbar-item" to="/faq" >FAQ</Link>
         </div>
       </div>
     </nav>
