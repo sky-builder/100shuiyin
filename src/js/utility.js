@@ -161,9 +161,9 @@ export function drawLogoList(ctx, logoList, actionType, activeLogo, imgWidth, im
         })
       }
     } else if (logoList[i].objectType === OBJECT_TYPE.TEXT) {
-      let { text, isItalic, y, h, cx, cy, fontFamily, color, hasTextBg, bgColor, hasTextOutline, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
+      let { text, isItalic, isBold, y, h, cx, cy, fontFamily, color, hasTextBg, bgColor, hasTextOutline, strokeWidth, strokeStyle, hasShadow, shadow } = logoList[i];
       ctx.textBaseline = 'top';
-      ctx.font = `${isItalic ? 'italic' : ''} ${parseInt(h)}px ${fontFamily}`;
+      ctx.font = `${isBold ? 'bold' : ''} ${isItalic ? 'italic' : ''} ${parseInt(h)}px ${fontFamily}`;
       const w = ctx.measureText(text).width;
       const x = cx - w / 2;
       logoList[i].x = x;

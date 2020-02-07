@@ -103,6 +103,7 @@ const AppAction = props => {
       strokeWidth: strokeWidth,
       hasShadow: true,
       isItalic: false,
+      isBold: false,
       shadow: {
         color: '#000000',
         blur: 10,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { OBJECT_TYPE, ACTION } from '../js/enum';
 import { ReactComponent as ItalicIcon } from '../icons/text-formatting.svg';
+import { ReactComponent as BoldIcon } from '../icons/bold.svg';
 
 function PropertyPanel(props) {
   const {
@@ -53,6 +54,11 @@ function PropertyPanel(props) {
       italicCheckbox.classList.remove('active');
       if (activeLogo.isItalic) {
         italicCheckbox.classList.add('active')
+      }
+      let boldCheckbox =  document.getElementById('js-font-bold-checkbox');
+      boldCheckbox.classList.remove('active');
+      if (activeLogo.isBold) {
+        boldCheckbox.classList.add('active')
       }
       if (document.getElementById('js-font-bg-color-input')) {
         document.getElementById('js-font-bg-color-input').value = activeLogo.bgColor;
@@ -230,6 +236,14 @@ function PropertyPanel(props) {
     }
     updateActiveLogo();
   }
+  function handleBoldChange(e) {
+    activeLogo.isBold = !activeLogo.isBold;
+    e.target.classList.remove('active');
+    if (activeLogo.isBold) {
+      e.target.classList.add('active');
+    }
+    updateActiveLogo();
+  }
   fontList.sort((a, b) => a.label < b.label ? -1 : 1)
   if (activeLogo) {
     if (activeLogo.objectType === OBJECT_TYPE.IMAGE) {
@@ -368,6 +382,7 @@ function PropertyPanel(props) {
                     </select>
                   </div>
                   <ItalicIcon id="js-font-italic-checkbox" onClick={handleItalicChange} />
+                  <BoldIcon id="js-font-bold-checkbox" onClick={handleBoldChange} />
                 </div>
               </div>
               <div className="app__property">
