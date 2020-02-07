@@ -91,6 +91,9 @@
 .app__text-logo {
   position: absolute;
 }
+.faq {
+  flex: 1;
+}
 
 .app__footer {
   padding: 10px;
