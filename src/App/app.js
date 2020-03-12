@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import LogRocket from 'logrocket';
+LogRocket.init('kznawp/online-tool');
 
 import { ACTION, PAGE_STAGE } from '../js/enum';
 import {
